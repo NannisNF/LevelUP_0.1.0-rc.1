@@ -1,0 +1,36 @@
+/* Perder.module.css */
+
+.perder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+
+.perderBanner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.espadasIcon {
+  height: 40px;
+  margin: 0 10px;
+}
+
+.perderLeyenda {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 600px;
+  margin-bottom: 20px;
+}

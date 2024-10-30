@@ -1,0 +1,91 @@
+/*Post.module.css*/
+@import url("https://fonts.googleapis.com/css2?family=Rowdies&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap");
+.postButton {
+  margin-top: 20px;
+  background-color: hsl(249, 39%, 7%);
+  margin-bottom: 5px;
+  margin-left: 80px;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  color: #fff;
+  font-family: "Cinzel", serif;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  position: sticky;
+  width: 900px;
+}
+
+.postButton:hover {
+  background-color: #292744;
+  color: rgb(240, 238, 238);
+  box-shadow: 0 2px 5px rgb(66, 83, 87);
+  transition: background-color 0.3s ease;
+}
+.postFormContainer {
+  background-color: #0d0b19;
+  padding: 20px;
+  border-radius: 8px;
+  color: #fff;
+  font-family: "Cinzel", serif;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+
+.postForm {
+  width: 100%;
+}
+
+.formSection {
+  margin-bottom: 10px;
+}
+
+input[type="file"],
+select,
+textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+}
+
+textarea {
+  height: 100px;
+}
+
+.formButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.saveButton,
+.cancelButton {
+  padding: 8px 16px;
+  margin: 4px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+}
+
+.saveButton {
+  background-color: #4caf50;
+}
+.saveButton:hover {
+  background-color: #97e699;
+  transition: background-color 0.3s ease;
+}
+
+.cancelButton {
+  background-color: #f44336;
+}
+.cancelButton:hover {
+  background-color: #da8983;
+  transition: background-color 0.3s ease;
+}

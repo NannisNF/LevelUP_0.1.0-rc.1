@@ -1,0 +1,231 @@
+/* Cuenta.module.css */
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
+
+body {
+  font-family: "Rowdies", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.backgroundContainerAccount {
+  margin-top: 220px;
+  height: 162vh;
+  width: 225vh;
+  background-size: cover;
+  background-image: url("./img/cuenta.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  position: relative;
+  z-index: 1;
+  background-attachment: scroll;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.centeredContainerAccount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  background-color: transparent;
+}
+
+.avatarContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 20px;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.avatarCuenta {
+  border-radius: 50%;
+  width: 250px;
+  margin-bottom: 20px;
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.buttonsContainer button {
+  width: 200px;
+  padding: 15px 20px;
+  font-size: 18px;
+  background-color: hsl(249, 39%, 7%);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: "Cinzel", serif;
+}
+
+.buttonsContainer button:hover {
+  background-color: #292744;
+  color: rgb(240, 238, 238);
+  box-shadow: 0 2px 5px rgb(66, 83, 87);
+  transition: background-color 0.3s ease;
+}
+
+.friendsList {
+  text-align: center;
+}
+
+.backButton {
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  background-color: hsl(249, 39%, 7%);
+  color: white;
+  border: 2px;
+  border-color: antiquewhite;
+  cursor: pointer;
+}
+.backButton:hover {
+  background-color: #292744;
+  color: rgb(240, 238, 238);
+  box-shadow: 0 2px 5px rgb(66, 83, 87);
+  transition: background-color 0.3s ease;
+}
+.friendsListContainer {
+  width: 350px;
+  background-color: hsl(245, 24%, 10%);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  font-family: "Cinzel", serif;
+}
+
+.friendsList {
+  max-height: 300px; /* Limitar la altura del contenedor */
+  overflow-y: auto; /* Agregar scroll si hay muchos amigos */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.friendItem {
+  display: flex;
+  align-items: center;
+  background-color: #0d0b19;
+  padding: 10px;
+  border-radius: 5px;
+  gap: 10px;
+  font-family: "Chakra Petch", sans-serif;
+}
+
+.friendAvatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.friendUsername {
+  flex-grow: 1;
+  font-weight: bold;
+}
+
+.deleteFriendButton {
+  background: none;
+  border: none;
+  color: #ff4d4d;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.deleteFriendButton:hover {
+  color: #ff1a1a;
+  transition: background-color 0.3s ease;
+}
+
+.editProfileForm {
+  width: 800px;
+  background-color: hsl(245, 24%, 10%);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.editProfileForm h2 {
+  font-family: "Cinzel", serif;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.formRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 15px;
+  font-family: "Chakra Petch", sans-serif;
+}
+
+.formRow input {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: #444;
+  color: white;
+}
+
+.formRow input::placeholder {
+  color: #b3b3b3;
+  font-family: "Chakra Petch", sans-serif;
+}
+
+.formButtons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.saveButton,
+.cancelButton {
+  width: 48%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: "Cinzel", serif;
+}
+
+.saveButton {
+  background-color: hsl(249, 39%, 7%);
+  color: white;
+}
+
+.saveButton:hover {
+  background-color: #292744;
+  color: rgb(240, 238, 238);
+  box-shadow: 0 2px 5px rgb(66, 83, 87);
+  transition: background-color 0.3s ease;
+}
+
+.cancelButton {
+  background-color: hsl(249, 39%, 7%);
+  color: white;
+}
+
+.cancelButton:hover {
+  background-color: #292744;
+  color: rgb(240, 238, 238);
+  box-shadow: 0 2px 5px rgb(66, 83, 87);
+  transition: background-color 0.3s ease;
+}

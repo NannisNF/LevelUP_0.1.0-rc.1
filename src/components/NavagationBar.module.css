@@ -1,0 +1,66 @@
+/* NavagationBar.module.css */
+@import url("https://fonts.googleapis.com/css2?family=Rowdies&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap");
+.brandNav {
+  color: antiquewhite;
+  font-family: "Rowdies", sans-serif;
+  font-size: 28px;
+  padding: 10px;
+  text-decoration: none;
+  background-color: rgb(0, 16, 17);
+}
+.navbarCustom {
+  background-color: rgb(0, 16, 17); /* Color oscuro */
+  width: 100%; /* Asegura que cubre todo el ancho de la ventana */
+  padding: 10px 0; /* Ajusta el padding si es necesario */
+  position: sticky; /* Asegura que la barra de navegación esté fija */
+  top: 0;
+  z-index: 1000; /* Para asegurarte de que esté sobre otros elementos */
+  text-decoration: none;
+  font-family: "Rowdies", sans-serif;
+}
+.searchResults {
+  max-height: 200px;
+  overflow-y: auto;
+  background: white;
+  position: absolute;
+  width: 500px;
+  z-index: 1000;
+  border: 1px solid #ccc;
+  margin-top: 40px;
+  color: black;
+  list-style: none;
+  padding: 0;
+  text-decoration: none;
+}
+
+.searchResultItem {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid #ccc;
+  font-family: "Rowdies", sans-serif;
+}
+
+.searchResultItem:last-child {
+  border-bottom: none;
+}
+
+.searchResultItem img {
+  margin-right: 10px;
+}
+.searchResultItem a {
+  color: black; /* Cambia el color del texto a negro */
+  text-decoration: none; /* Elimina el subrayado */
+}
+
+.searchResultItem a:hover {
+  color: rgb(114, 74, 109); /* Color al pasar el mouse, opcional */
+}
+.customDropdownItem {
+  font-family: "Chakra Petch", sans-serif;
+}
+.customDropdownItem:hover {
+  background-color: darkgray;
+  transition: background-color 0.3s ease;
+}

@@ -1,0 +1,82 @@
+/* AvatarForm.module.css */
+.avatarBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  background-color: #241525;
+  border: 1px solid antiquewhite;
+  height: 370px;
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: "Cinzel", serif;
+}
+
+.title {
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.avatarGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.cardA {
+  background: none;
+  border: none;
+  text-align: center;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.cardA:hover {
+  background: rgb(160, 153, 153);
+}
+
+.avatarSelected {
+  background: rgb(160, 153, 153);
+  border: 5px solid rgb(160, 153, 153);
+}
+
+.cardA img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 10%;
+  margin: 1px;
+  padding: 1px;
+  border: 2px solid transparent;
+}
+
+.cardName {
+  color: #fff;
+  font-family: "Cinzel", serif;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.buttonsAvatar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 400px;
+}
+
+.buttonAvatar {
+  background-color: #190e1a;
+  color: antiquewhite;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  border: none;
+}
+
+.buttonAvatar:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}

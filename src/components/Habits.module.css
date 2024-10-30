@@ -1,0 +1,224 @@
+/* Habits.module.css */
+@import url("https://fonts.googleapis.com/css2?family=Rowdies&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
+
+.brandNav {
+  color: antiquewhite;
+  font-family: "Rowdies", sans-serif;
+  font-size: 28px;
+  padding: 10px;
+  text-decoration: none;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: none;
+}
+
+.dropdownItem {
+  padding: 8px 16px;
+  display: block;
+  text-decoration: none;
+  color: black;
+  font-family: "Rowdies", sans-serif;
+}
+
+.dropdownItem:hover {
+  color: #88811cfb;
+  opacity: 60%;
+}
+
+.backgroundContainerHabits {
+  margin-top: 220px;
+  height: 162vh;
+  width: 225vh;
+  background-size: cover;
+  background-image: url("./img/habits.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  position: sticky;
+  z-index: 1;
+  background-attachment: scroll;
+}
+
+.centeredContainerHabits {
+  position: relative;
+  z-index: 1;
+  padding-top: 100px;
+  margin: 0 auto;
+  width: 800px;
+  max-width: 100%;
+  font-family: "Chakra Petch", sans-serif;
+}
+
+.currentHabit {
+  background-color: #0d0b19;
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-family: "Cinzel", serif;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  width: 700px;
+}
+
+.currentHabit img.classUser {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.currentHabit:hover {
+  background-color: #292744;
+  color: rgb(240, 238, 238);
+  box-shadow: 0 2px 5px rgb(66, 83, 87);
+  transition: background-color 0.3s ease;
+}
+
+.habitDetail {
+  background-color: #0d0b19;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  color: #fff;
+  font-family: "Chakra Petch", sans-serif;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.habitDetail h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  font-family: "Cinzel", serif;
+}
+
+.habitDetail img.classUser {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.progressCircle {
+  margin: 20px 0;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.buttons button {
+  background-color: #1c1a2d;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: "Cinzel", serif;
+}
+
+.buttons button:hover {
+  background-color: #292744;
+  color: rgb(240, 238, 238);
+  box-shadow: 0 2px 5px rgb(66, 83, 87);
+  transition: background-color 0.3s ease;
+}
+
+.addHabitForm {
+  background-color: #0d0b19;
+  padding: 20px;
+  border-radius: 8px;
+  color: #fff;
+  font-family: "Cinzel", serif;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.addHabitForm input,
+.addHabitForm textarea,
+.addHabitForm select {
+  margin: 10px 0;
+  padding: 8px;
+  width: 80%;
+  border-radius: 4px;
+  border: none;
+}
+
+.addHabitForm label {
+  align-self: flex-start;
+  margin-left: 10%;
+}
+
+.addHabitForm button {
+  margin: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #1c1a2d;
+  color: white;
+  cursor: pointer;
+}
+
+.addHabitForm button:hover {
+  background-color: #292744;
+  color: rgb(240, 238, 238);
+  box-shadow: 0 2px 5px rgb(66, 83, 87);
+}
+
+.addHabitButton {
+  background-color: #0d0b19;
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-family: "Cinzel", serif;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  width: 700px;
+}
+
+.addHabitButton:hover {
+  background-color: #292744;
+  color: rgb(240, 238, 238);
+  box-shadow: 0 2px 5px rgb(66, 83, 87);
+  transition: background-color 0.3s ease;
+}
+.recommendationsDropdown {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  width: calc(100% - 20px); /* Ajusta según tus necesidades */
+  max-height: 200px;
+  overflow-y: auto;
+  color: rgb(0, 0, 0);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 100; /* Para asegurarte de que se muestre sobre otros elementos */
+}
+
+.recommendationsDropdown li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.recommendationsDropdown li:hover {
+  color: rgb(0, 0, 0);
+  background-color: #f0f0f0;
+  transition: background-color 0.3s ease;
+}

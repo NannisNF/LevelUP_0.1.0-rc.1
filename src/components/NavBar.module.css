@@ -1,0 +1,19 @@
+/* NavBar.module.css */
+.brand {
+  color: antiquewhite;
+  font-family: "Rowdies", sans-serif;
+  font-size: 28px;
+  padding: 10px;
+  text-decoration: none;
+  background-color: rgb(0, 16, 17);
+}
+.navbarCustom {
+  background-color: rgb(0, 16, 17); /* Color oscuro */
+  width: 100%; /* Asegura que cubre todo el ancho de la ventana */
+  padding: 10px 0; /* Ajusta el padding si es necesario */
+  position: sticky; /* Asegura que la barra de navegación esté fija */
+  top: 0;
+  z-index: 1000; /* Para asegurarte de que esté sobre otros elementos */
+  border-color: antiquewhite;
+  border-radius: 5px;
+}

@@ -1,0 +1,85 @@
+/* App.module.css */
+@import url("https://fonts.googleapis.com/css2?family=Rowdies&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap");
+
+.mainBackgroundContainer {
+  height: 100vh;
+  background-image: url("./img/main.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  margin-top: 2px;
+}
+
+.backgroundContainerDashboard {
+  height: 100vh;
+  width: 100%;
+  background-image: url("./img/dashboard.png");
+  background-size: cover;
+  background-position: center center;
+  position: relative;
+  z-index: 1;
+  margin-top: 2px;
+}
+
+.containerFluid {
+  background-color: rgb(1, 29, 31);
+}
+
+.brand {
+  color: antiquewhite;
+  font-family: "Rowdies", sans-serif;
+  font-size: 28px;
+  padding: 10px;
+  text-decoration: none;
+}
+
+.centeredContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.centeredButton {
+  font-size: 30px;
+  font-family: "Rowdies", sans-serif;
+  background-color: rgb(0, 16, 17);
+  border-color: antiquewhite;
+  color: antiquewhite;
+  transition: background-color 0.3s ease;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.centeredButton:hover {
+  background-color: dimgrey;
+  color: rgb(240, 238, 238);
+  box-shadow: 0 2px 5px rgb(0, 16, 17);
+  transition: background-color 0.3s ease;
+}
+
+footer {
+  border-top: solid 1px antiquewhite;
+  background-color: #190e1a;
+  padding: 3rem;
+  color: white;
+  font-family: "Chakra Petch", sans-serif;
+}
+
+footer section {
+  float: right;
+}
+
+footer p {
+  margin: 0;
+}
+
+footer a {
+  transition: color 0.3s ease;
+  color: white;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: rgb(223, 211, 53);
+}

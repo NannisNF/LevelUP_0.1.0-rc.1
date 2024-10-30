@@ -1,0 +1,84 @@
+/* LogInForm.module.css */
+.containerForm {
+  display: flex;
+  height: 340px;
+  max-width: 900px;
+  transition: all 1s ease;
+  font-size: 15px;
+  padding: 0;
+  background-color: rgb(0, 16, 17);
+  color: antiquewhite;
+  margin: 10px;
+  border: solid 2px antiquewhite;
+  font-family: "Rowdies", sans-serif;
+}
+
+.information {
+  width: 35%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  background-color: beige;
+  color: rgb(0, 16, 17);
+}
+
+.infoChilds {
+  width: 100%;
+  padding: 0 30px;
+}
+
+.infoChilds h2 {
+  font-size: 25px;
+  font-family: "Cinzel", serif;
+}
+
+.infoChilds input {
+  background-color: #190e1a;
+  color: antiquewhite;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.infoChilds input:hover {
+  background-color: #443146;
+  color: dimgrey;
+  box-shadow: 0 2px 5px rgb(0, 16, 17);
+}
+
+.formInformation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+  text-align: center;
+  padding: 10px;
+  padding-left: 70px;
+  font-size: 15px;
+}
+
+.formInformationChilds h2 {
+  font-size: 25px;
+  font-family: "Cinzel", serif;
+}
+
+.formInformationChilds input {
+  box-shadow: 0 1px 2px rgb(0, 16, 17);
+}
+
+.logButton {
+  box-shadow: none;
+  background-color: #190e1a;
+  color: antiquewhite;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+.logButton:hover {
+  background-color: dimgrey;
+  color: rgb(240, 238, 238);
+  box-shadow: 0 2px 5px rgb(66, 83, 87);
+  transition: background-color 0.3s ease;
+}
