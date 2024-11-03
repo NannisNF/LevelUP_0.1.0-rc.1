@@ -159,16 +159,16 @@
   border-radius: 1px;
 }
 .postsContainer {
-  max-height: 80vh; /* Ajusta según necesites */
+  max-height: 80vh;
   overflow-y: auto;
   width: 100%;
   margin-top: 20px;
-  /* Ocultar la barra de scroll en Chrome, Safari y Edge */
-  scrollbar-width: none; /* Para Firefox */
+
+  scrollbar-width: none;
 }
 
 .postsContainer::-webkit-scrollbar {
-  display: none; /* Para Chrome, Safari y Edge */
+  display: none;
 }
 .levelBar {
   width: 100%;

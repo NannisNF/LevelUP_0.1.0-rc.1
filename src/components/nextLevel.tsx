@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import espadas from "./img/espadas.png";
-import levelUpImage from "./img/userLevelUP.png"; // Asegúrate de tener una imagen para "subir de nivel"
+import levelUpImage from "./img/userLevelUP.png";
 import styles from "./nextLevel.module.css";
 
 const NextLevel = () => {

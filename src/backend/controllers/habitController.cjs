@@ -1,6 +1,6 @@
 //habitController.cjs
-const Habitos = require("../models/Habitos.cjs"); // Modelo de hábitos
-const Clase = require("../models/Clase.cjs"); // Modelo de clases
+const Habitos = require("../models/Habitos.cjs");
+const Clase = require("../models/Clase.cjs");
 const HabitosPredeterminados = require("../models/HabitosPredeterminados.cjs");
 const Amistad = require("../models/Amistad.cjs");
 const Sequelize = require("sequelize");
@@ -13,7 +13,7 @@ const getHabitsByUserId = async (req, res) => {
       include: [
         {
           model: Clase,
-          as: "clase", // Asegúrate que el modelo Habitos tiene una relación con Clase que usa este alias
+          as: "clase",
           attributes: ["nameclase", "claseurl"],
         },
       ],
@@ -26,7 +26,6 @@ const getHabitsByUserId = async (req, res) => {
     }
 
     const habitsWithImages = habits.map((habit) => {
-      // Verifica si la clase está presente antes de intentar acceder a claseurl
       const imageUrl = habit.clase
         ? `${req.protocol}://${req.get("host")}/img/classes/${
             habit.clase.claseurl

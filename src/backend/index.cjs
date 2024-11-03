@@ -26,13 +26,16 @@ const likeRoutes = require("./routes/likes.cjs");
 
 const app = express();
 
+const allowedOrigin = "https://tu-dominio-frontend.com"; //URL de frontend
+
 app.use(
   cors({
-    origin: "http://localhost:5173", // Permite las solicitudes desde tu frontend
+    origin: allowedOrigin,
     methods: "GET,POST,PUT,DELETE",
-    credentials: true, // Si necesitas enviar cookies con las solicitudes
+    credentials: true,
   })
 );
+
 app.use(express.json()); // Solicitudes JSON
 app.use(express.static("public")); // Archivos estáticos desde la carpeta public
 
@@ -54,14 +57,14 @@ app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
 
-// Tarea programada diaria para actualizar el estado de los hábitos
+// Tarea para actualizar el estado de los habitos
 cron.schedule("0 0 * * *", async () => {
   console.log("Ejecutando actualización diaria de hábitos");
   try {
     const today = new Date().toISOString().split("T")[0]; // Fecha actual en formato YYYY-MM-DD
     console.log("Fecha actual:", today);
 
-    // Buscar hábitos que necesitan ser actualizados
+    // Buscar habitos que necesitan ser actualizados
     const habitsToUpdate = await Habitos.findAll({
       where: {
         fin_habit: { [Op.lte]: today },
@@ -117,7 +120,6 @@ cron.schedule("0 0 * * *", async () => {
           xp_gained
         );
 
-        // Verificar si el usuario subió de nivel
         await checkForLevelUp(user);
       }
     }
@@ -130,7 +132,7 @@ cron.schedule("0 0 * * *", async () => {
   }
 });
 
-// Tarea programada semanal para reiniciar xp_semanal
+// Tarea reiniciar xp_semanal
 cron.schedule("0 0 * * 1", async () => {
   console.log("Reiniciando xp_semanal para todos los usuarios");
   try {
@@ -144,14 +146,14 @@ cron.schedule("0 0 * * 1", async () => {
   }
 });
 
-// Tarea programada diaria para verificar la regla de publicaciones
+// Tarea diaria de publicaciones
 cron.schedule("0 0 * * *", async () => {
   console.log("Ejecutando verificación diaria de publicaciones");
   try {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Obtener todos los usuarios que tienen hábitos activos
+    // Obtener usuarios con habitos activos
     const activeHabits = await Habitos.findAll({
       where: {
         status_habito: "En progreso",
@@ -175,7 +177,7 @@ cron.schedule("0 0 * * *", async () => {
       });
 
       if (postsToday === 0) {
-        // El usuario no ha hecho ninguna publicación hoy, descontar 5 XP
+        // El usuario no ha publico hoy, descontar 5 XP
         const user = await Usuarios.findByPk(userId);
         if (user) {
           user.xp_total = Math.max((user.xp_total || 0) - 5, 0);
@@ -199,4 +201,4 @@ cron.schedule("0 0 * * *", async () => {
   }
 });
 
-module.exports = app; // Exportamos 'app' para usarla en otros lugares si es necesario
+module.exports = app;

@@ -147,8 +147,6 @@ exports.rejectTournamentInvitation = async (req, res) => {
     participant.status = "rejected";
     await participant.save();
 
-    // Opcional: notificar al creador del torneo
-
     res.status(200).send({ message: "Has rechazado la invitación al torneo." });
   } catch (error) {
     console.error("Error al rechazar la invitación:", error);

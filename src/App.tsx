@@ -60,7 +60,7 @@ function AppContent() {
       {isInicio && (
         <footer>
           <section>
-            <a href="http://localhost:5173/Inicio">Ir al comienzo</a>
+            <a href="/Inicio">Ir al comienzo</a>
             <br />
             <a href="mailto:alannis.perez7472@alumnos.udg.mx">
               alannis.perez7472@alumnos.udg.mx

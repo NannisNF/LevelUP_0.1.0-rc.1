@@ -1,4 +1,3 @@
-// Torneos.tsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./components/Torneos.module.css";
@@ -35,14 +34,17 @@ function Torneos() {
   useEffect(() => {
     const fetchActiveTournament = async () => {
       try {
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
         const response = await axios.get(
-          `http://localhost:3000/api/tournaments/active/${userId}`
+          `${API_BASE_URL}/api/tournaments/active/${userId}`
         );
+
         setActiveTournament(response.data.tournament);
         setParticipants(response.data.participants);
-        setView("participants"); // Cambiamos la vista a "participants"
+        setView("participants"); // Vista de participantes
       } catch (error) {
-        // Si el usuario no tiene un torneo activo, permanece en la vista inicial
+        // Si el usuario no tiene un torneo activo, aparece la barra de busqueda
         setView("initial");
         console.error(
           "No tienes torneos activos:",
@@ -56,9 +58,12 @@ function Torneos() {
 
   const fetchResults = async () => {
     try {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
       const response = await axios.get(
-        `http://localhost:3000/api/friends/${userId}/searchAvailable/${search}`
+        `${API_BASE_URL}/api/friends/${userId}/searchAvailable/${search}`
       );
+
       setResults(response.data);
     } catch (error) {
       console.error("Error fetching friends", error);
@@ -88,11 +93,13 @@ function Torneos() {
 
   const handleConfirm = async () => {
     const participantIds = selectedParticipants.map((p) => p.id_usuario);
-    const betAmount = 100; // Puedes permitir que el usuario establezca este valor
+    const betAmount = 400;
 
     try {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
       const response = await axios.post(
-        "http://localhost:3000/api/tournaments/create",
+        `${API_BASE_URL}/api/tournaments/create`,
         {
           creator_id: parseInt(userId, 10),
           participant_ids: participantIds,
@@ -100,7 +107,7 @@ function Torneos() {
         }
       );
 
-      // Incluye al creador en la lista de participantes
+      // Incluir al creador del torneo en la lista de participantes
       const creator = {
         id_usuario: parseInt(userId, 10),
         username: userUsername,

@@ -1,4 +1,3 @@
-/* Muro.tsx */
 import React, { useState, useEffect } from "react";
 import styles from "./components/Muro.module.css";
 import PostButton from "./components/PostButton";
@@ -7,19 +6,25 @@ import man_avatar_2 from "./components/img/avatars/man_avatar_2.png";
 const Muro = () => {
   const [posts, setPosts] = useState([]);
   const userId = localStorage.getItem("user_id");
-  useEffect(() => {
-    fetch(`http://localhost:3000/api/posts/friends/${userId}`)
-      .then((response) => response.json())
-      .then((data) => setPosts(data))
-      .catch((error) => console.error("Failed to fetch posts:", error));
-  }, []);
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-  // Función para manejar el like
+  useEffect(() => {
+    if (userId) {
+      fetch(`${API_BASE_URL}/api/posts/friends/${userId}`)
+        .then((response) => response.json())
+        .then((data) => setPosts(data))
+        .catch((error) => console.error("Failed to fetch posts:", error));
+    } else {
+      console.error("User ID is null or undefined");
+    }
+  }, [userId]);
+
+  // Funcion likes
   const handleLike = async (postId, hasLiked) => {
     try {
       const url = hasLiked
-        ? "http://localhost:3000/api/likes/unlike"
-        : "http://localhost:3000/api/likes/like";
+        ? `${API_BASE_URL}/api/likes/unlike`
+        : `${API_BASE_URL}/api/likes/like`;
 
       const response = await fetch(url, {
         method: "POST",
@@ -35,7 +40,7 @@ const Muro = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Actualizar el estado de los posts
+        // Actualizar posts
         setPosts((prevPosts) =>
           prevPosts.map((post) =>
             post.id_publicacion === postId
@@ -72,8 +77,8 @@ const Muro = () => {
                   <div className={styles.postAuthor}>
                     <img
                       src={
-                        post.user.avatar
-                          ? post.user.avatar.avatar
+                        post.user.avatar && post.user.avatar.avatar
+                          ? `${API_BASE_URL}/${post.user.avatar.avatar}`
                           : man_avatar_2
                       }
                       alt="Avatar"
@@ -83,11 +88,13 @@ const Muro = () => {
                     />
                     <h2>{post.user.username}</h2>
                   </div>
-                  <img
-                    src={post.cont_media || ejemplo1}
-                    alt="Post"
-                    className={styles.postImage}
-                  />
+                  {post.cont_media && (
+                    <img
+                      src={`${API_BASE_URL}/${post.cont_media}`}
+                      alt="Post"
+                      className={styles.postImage}
+                    />
+                  )}
                   <div className={styles.postDetails}>
                     <div className={styles.postContent}>
                       <p>{post.cont_text}</p>

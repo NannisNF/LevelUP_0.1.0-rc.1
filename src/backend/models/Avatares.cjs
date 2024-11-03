@@ -1,6 +1,6 @@
 //Avatares.cjs
 const { DataTypes } = require("sequelize");
-const sequelize = require("../db.cjs"); // Tu configuración de la base de datos
+const sequelize = require("../db.cjs");
 
 const Avatares = sequelize.define(
   "Avatares",
@@ -15,12 +15,12 @@ const Avatares = sequelize.define(
       allowNull: false,
     },
     avatar: {
-      type: DataTypes.STRING, // Aquí guardas la URL del avatar
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },
   {
-    tableName: "avatar", // Nombre de la tabla en la base de datos
+    tableName: "avatar",
     timestamps: false,
   }
 );

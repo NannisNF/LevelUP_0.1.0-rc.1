@@ -4,6 +4,7 @@ import styles from "./components/Cuenta.module.css";
 import man_avatar_2 from "./components/img/avatars/man_avatar_2.png";
 
 function Cuenta() {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const avatarUrl = localStorage.getItem("avatar_url");
   const userId = localStorage.getItem("user_id");
   const [showFriendsList, setShowFriendsList] = useState(false);
@@ -13,22 +14,25 @@ function Cuenta() {
     nombre: "",
     apellido: "",
     username: "",
-    pass: "",
   });
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [friends, setFriends] = useState([]);
 
   useEffect(() => {
+    if (!userId) {
+      console.error("El userId es inválido");
+      navigate("/Inicio");
+      return;
+    }
     // Obtener información del usuario
-    fetch(`http://localhost:3000/api/users/${userId}`)
+    fetch(`${API_BASE_URL}/api/users/${userId}`)
       .then((res) => res.json())
       .then((data) => {
         setUserInfo({
           nombre: data.nombre_user,
           apellido: data.apellido_user,
           username: data.username,
-          pass: "••••••••",
         });
       })
       .catch((err) => console.error(err));
@@ -39,16 +43,16 @@ function Cuenta() {
       "¿Estás seguro de eliminar a este amigo?"
     );
     if (confirmation) {
-      fetch(`http://localhost:3000/api/friends/delete`, {
+      fetch(`${API_BASE_URL}/api/friends/delete`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId, friendId: id }),
+        body: JSON.stringify({ userId: parseInt(userId, 10), friendId: id }),
       })
         .then((res) => {
           if (res.ok) {
-            setFriends(friends.filter((friend) => friend.id !== id));
+            setFriends(friends.filter((friend) => friend.id_usuario !== id));
           } else {
             alert("Error al eliminar al amigo");
           }
@@ -58,14 +62,13 @@ function Cuenta() {
   };
 
   const handleAmigosClick = () => {
-    // Verifica que userId es válido
     if (!userId) {
       console.error("El userId es inválido");
       return;
     }
 
     // Obtener lista de amigos
-    fetch(`http://localhost:3000/api/friends/${userId}/list`)
+    fetch(`${API_BASE_URL}/api/friends/${userId}/list`)
       .then((res) => {
         if (!res.ok) {
           throw new Error(
@@ -87,6 +90,8 @@ function Cuenta() {
   };
 
   const handleSalirClick = () => {
+    // Limpiar localStorage y redirigir a pagina principal
+    localStorage.clear();
     navigate("/Inicio");
   };
 
@@ -96,30 +101,40 @@ function Cuenta() {
 
   const handleSaveProfile = (e) => {
     e.preventDefault();
+
+    if (!userInfo.nombre || !userInfo.apellido || !userInfo.username) {
+      alert("Por favor, completa todos los campos obligatorios.");
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       alert("Las contraseñas no coinciden.");
       return;
     }
-    // Aquí iría la lógica para guardar la nueva información
+
     const updatedInfo = {
       nombre_user: userInfo.nombre,
       apellido_user: userInfo.apellido,
       username: userInfo.username,
-      pass: newPassword || userInfo.pass, // Si no se cambió la contraseña
+      ...(newPassword && { pass: newPassword }),
     };
-    fetch(`http://localhost:3000/api/users/update/${userId}`, {
+
+    fetch(`${API_BASE_URL}/api/users/update/${userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(updatedInfo),
     })
-      .then((res) => {
-        if (res.ok) {
+      .then((res) =>
+        res.json().then((data) => ({ status: res.status, body: data }))
+      )
+      .then(({ status, body }) => {
+        if (status >= 200 && status < 300) {
           alert("Información actualizada con éxito");
           setIsEditingProfile(false);
         } else {
-          alert("Error al actualizar la información");
+          alert(`Error al actualizar la información: ${body.message}`);
         }
       })
       .catch((err) => console.error(err));
@@ -135,7 +150,7 @@ function Cuenta() {
         <div className={styles.centeredContainerAccount}>
           <div className={styles.avatarContainer}>
             <img
-              src={avatarUrl || man_avatar_2}
+              src={avatarUrl ? `${API_BASE_URL}/${avatarUrl}` : man_avatar_2}
               className={styles.avatarCuenta}
               alt="Usuario Avatar"
             />
@@ -161,7 +176,11 @@ function Cuenta() {
                 {friends.map((friend) => (
                   <div key={friend.id_usuario} className={styles.friendItem}>
                     <img
-                      src={friend.avatar || man_avatar_2} // Asegúrate de usar la URL correcta del avatar del amigo
+                      src={
+                        friend.avatar
+                          ? `${API_BASE_URL}/${friend.avatar}`
+                          : man_avatar_2
+                      }
                       alt="Avatar del amigo"
                       className={styles.friendAvatar}
                     />
@@ -180,7 +199,7 @@ function Cuenta() {
             </div>
           )}
 
-          {/* Mostrar formulario de edición de perfil */}
+          {/* Mostrar formulario para editar informacionde usuario */}
           {isEditingProfile && (
             <form
               onSubmit={handleSaveProfile}

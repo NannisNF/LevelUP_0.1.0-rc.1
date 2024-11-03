@@ -64,7 +64,7 @@ const likePost = async (req, res) => {
   }
 };
 
-// Quitar Like de una Publicación
+// Quitar Like
 const unlikePost = async (req, res) => {
   const { userId, postId } = req.body;
 
@@ -91,7 +91,7 @@ const unlikePost = async (req, res) => {
   }
 };
 
-// Obtener el número de likes de una publicación
+// Obtener el número de likes
 const getLikesCount = async (req, res) => {
   const { postId } = req.params;
 

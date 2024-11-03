@@ -2,9 +2,10 @@
 import { useEffect, useState } from "react";
 import styles from "./components/Habits.module.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css"; // Asegúrate de importar el CSS
+import "react-circular-progressbar/dist/styles.css";
 
 function Habitos() {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [view, setView] = useState("habitList");
   const [selectedHabit, setSelectedHabit] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -21,13 +22,13 @@ function Habitos() {
   useEffect(() => {
     const fetchHabits = async () => {
       const userId = localStorage.getItem("user_id");
-      console.log(
-        "ID guardado en localStorage:",
-        localStorage.getItem("user_id")
-      );
+      if (!userId) {
+        console.error("User ID is null or undefined");
+        return;
+      }
       try {
         const response = await fetch(
-          `http://localhost:3000/api/habits/user/${userId}`
+          `${API_BASE_URL}/api/habits/user/${userId}`
         );
         if (!response.ok) {
           throw new Error(`Failed to fetch habits: ${response.statusText}`);
@@ -64,6 +65,19 @@ function Habitos() {
 
   const handleSaveHabit = async () => {
     const userId = localStorage.getItem("user_id");
+
+    // Validar campos obligatorios
+    if (!title || !description || !startDate || !endDate) {
+      alert("Por favor, completa todos los campos obligatorios.");
+      return;
+    }
+
+    // Validar fechas
+    if (new Date(startDate) > new Date(endDate)) {
+      alert("La fecha de inicio no puede ser posterior a la fecha de fin.");
+      return;
+    }
+
     const habitData = {
       habit_uid: userId,
       titulo: title,
@@ -74,7 +88,7 @@ function Habitos() {
       clase_habit: classHabit,
     };
     try {
-      const response = await fetch("http://localhost:3000/api/habits", {
+      const response = await fetch(`${API_BASE_URL}/api/habits`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,8 +98,11 @@ function Habitos() {
       if (!response.ok) {
         throw new Error(`Failed to create habit: ${response.statusText}`);
       }
-      // Recargar la página o actualizar el estado de hábitos
-      window.location.reload();
+      // Actualizar la lista
+      const newHabit = await response.json();
+      setHabits([...habits, newHabit]);
+      setShowForm(false);
+      setView("habitList");
     } catch (error) {
       console.error("Error saving new habit:", error);
     }
@@ -103,7 +120,7 @@ function Habitos() {
     const daysElapsed =
       (today.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
     const rawPercentage = (daysElapsed / totalDays) * 100;
-    const percentage = Math.min(rawPercentage, 100);
+    const percentage = Math.min(Math.max(rawPercentage, 0), 100);
 
     const isCompleted =
       percentage >= 100 || selectedHabit.status_habito === "completado";
@@ -113,7 +130,11 @@ function Habitos() {
         <h2>{selectedHabit.titulo}</h2>
         <img
           className={styles.classUser}
-          src={selectedHabit.image}
+          src={
+            selectedHabit.image
+              ? `${API_BASE_URL}/${selectedHabit.image}`
+              : "/img/classes/default.jpg"
+          }
           alt={selectedHabit.titulo}
         />
         <p>{selectedHabit.descripcion}</p>
@@ -143,12 +164,39 @@ function Habitos() {
         </div>
         <div className={styles.buttons}>
           <button>Editar</button>
-          <button>Eliminar</button>
+          <button onClick={handleDeleteHabit}>Eliminar</button>
           <button onClick={handleCloseDetail}>Cerrar</button>
         </div>
       </article>
     );
   }
+
+  const handleDeleteHabit = async () => {
+    const confirmation = window.confirm(
+      "¿Estás seguro de eliminar este hábito?"
+    );
+    if (confirmation && selectedHabit) {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/habits/${selectedHabit.id_habito}`,
+          {
+            method: "DELETE",
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`Failed to delete habit: ${response.statusText}`);
+        }
+        // Actualizar la lista de hábitos
+        setHabits(
+          habits.filter((habit) => habit.id_habito !== selectedHabit.id_habito)
+        );
+        setSelectedHabit(null);
+        setView("habitList");
+      } catch (error) {
+        console.error("Error deleting habit:", error);
+      }
+    }
+  };
 
   function handleTitleFocus() {
     fetchRecommendations();
@@ -164,7 +212,7 @@ function Habitos() {
     const userId = localStorage.getItem("user_id");
     try {
       const response = await fetch(
-        `http://localhost:3000/api/habits/recommendations/${userId}`
+        `${API_BASE_URL}/api/habits/recommendations/${userId}`
       );
       if (!response.ok) {
         throw new Error(
@@ -177,6 +225,7 @@ function Habitos() {
       console.error("Error fetching recommendations:", error);
     }
   }
+
   function handleRecommendationClick(habit) {
     setTitle(habit.titulo);
     setDescription(habit.descripcion);
@@ -192,7 +241,7 @@ function Habitos() {
           <section className={styles.containerHabits}>
             {view === "habitList" && (
               <>
-                {habits.length > 0 &&
+                {habits.length > 0 ? (
                   habits.map((habit) => (
                     <article
                       key={habit.id_habito}
@@ -201,13 +250,20 @@ function Habitos() {
                     >
                       <img
                         className={styles.classUser}
-                        src={habit.image || "/img/classes/sabio.jpg"}
-                        alt={habit.titulo || "Default title"}
+                        src={
+                          habit.image
+                            ? `${API_BASE_URL}/${habit.image}`
+                            : "/img/classes/sabio.jpg"
+                        }
+                        alt={habit.titulo || "No Title"}
                       />
                       <h2>{habit.titulo || "No Title"}</h2>
                       <p>Puntos de XP: {habit.xp_habito || 0}</p>
                     </article>
-                  ))}
+                  ))
+                ) : (
+                  <p>No tienes hábitos en este momento. ¡Crea uno nuevo!</p>
+                )}
                 <button
                   className={styles.addHabitButton}
                   onClick={handleAddHabit}
@@ -260,24 +316,32 @@ function Habitos() {
                     onChange={(e) => setEndDate(e.target.value)}
                   />
                 </label>
-                <select
-                  value={classHabit}
-                  onChange={(e) => setClassHabit(e.target.value)}
-                >
-                  <option value="1">Guerrero</option>
-                  <option value="2">Sabio</option>
-                  <option value="3">Aventurero</option>
-                </select>
-                <select
-                  value={xpHabit}
-                  onChange={(e) => setXpHabit(e.target.value)}
-                >
-                  <option value="750">Fácil</option>
-                  <option value="1300">Normal</option>
-                  <option value="3000">Difícil</option>
-                </select>
-                <button onClick={handleSaveHabit}>Guardar</button>
-                <button onClick={handleCloseForm}>Cancelar</button>
+                <label>
+                  Clase del hábito:
+                  <select
+                    value={classHabit}
+                    onChange={(e) => setClassHabit(e.target.value)}
+                  >
+                    <option value="1">Guerrero</option>
+                    <option value="2">Sabio</option>
+                    <option value="3">Aventurero</option>
+                  </select>
+                </label>
+                <label>
+                  Dificultad:
+                  <select
+                    value={xpHabit}
+                    onChange={(e) => setXpHabit(e.target.value)}
+                  >
+                    <option value="750">Fácil</option>
+                    <option value="1300">Normal</option>
+                    <option value="3000">Difícil</option>
+                  </select>
+                </label>
+                <div className={styles.formButtons}>
+                  <button onClick={handleSaveHabit}>Guardar</button>
+                  <button onClick={handleCloseForm}>Cancelar</button>
+                </div>
               </div>
             )}
             {view === "habitDetail" && selectedHabit && <HabitDetail />}

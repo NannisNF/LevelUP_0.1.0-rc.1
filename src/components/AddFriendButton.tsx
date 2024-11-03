@@ -4,7 +4,7 @@ import styles from "./Perfil.module.css";
 
 type AddFriendButtonProps = {
   children: React.ReactNode;
-  onClick: () => void; // Función para manejar el clic
+  onClick: () => void; // Clic de solicitud
 };
 
 const AddFriendButton = ({ children, onClick }: AddFriendButtonProps) => {

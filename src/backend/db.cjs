@@ -1,10 +1,16 @@
-//db.cjs
+// db.cjs
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize("level_up_db", "root", "Sinnala02032000", {
-  host: "localhost",
-  dialect: "mysql",
-});
+const sequelize = new Sequelize(
+  "nombre_base_de_datos",
+  "usuario",
+  "contraseña",
+  {
+    host: "nombre_host",
+    port: 3306, // O el puerto proporcionado por Railway
+    dialect: "mysql",
+  }
+);
 
 sequelize
   .authenticate()

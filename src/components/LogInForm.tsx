@@ -5,6 +5,7 @@ import styles from "./LogInForm.module.css";
 import AvatarForm from "./AvatarForm";
 
 function LogInForm() {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [currentView, setCurrentView] = useState<
     "login" | "register" | "avatar"
   >("login");
@@ -31,14 +32,31 @@ function LogInForm() {
   };
 
   const handleShowAvatarForm = () => {
+    // Validar campos obligatorios
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.username ||
+      !formData.password
+    ) {
+      alert("Por favor, completa todos los campos obligatorios.");
+      return;
+    }
     setCurrentView("avatar");
   };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validar campos obligatorios
+    if (!loginUsername || !loginPassword) {
+      alert("Por favor, ingresa tu usuario y contraseña.");
+      return;
+    }
+
     try {
-      const response = await fetch("http://localhost:3000/api/login", {
+      const response = await fetch(`${API_BASE_URL}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,16 +68,37 @@ function LogInForm() {
       });
 
       if (!response.ok) {
-        throw new Error("Datos incorrectos, por favor intentar de nuevo");
+        if (response.status === 401) {
+          throw new Error(
+            "Credenciales incorrectas. Por favor, verifica tu usuario y contraseña."
+          );
+        } else {
+          throw new Error(
+            "Error en el servidor. Por favor, intenta más tarde."
+          );
+        }
       }
 
       const data = await response.json();
 
-      localStorage.setItem("nombre_user", data.nombre_user);
-      localStorage.setItem("apellido_user", data.apellido_user);
-      localStorage.setItem("avatar_url", data.avatar);
-      localStorage.setItem("username", data.username);
-      localStorage.setItem("user_id", data.id);
+      // Verificar que los datos existen antes de almacenarlos
+      if (
+        data.nombre_user &&
+        data.apellido_user &&
+        data.avatar &&
+        data.username &&
+        data.id
+      ) {
+        localStorage.setItem("nombre_user", data.nombre_user);
+        localStorage.setItem("apellido_user", data.apellido_user);
+        localStorage.setItem("avatar_url", data.avatar);
+        localStorage.setItem("username", data.username);
+        localStorage.setItem("user_id", data.id);
+      } else {
+        throw new Error(
+          "Datos del usuario incompletos en la respuesta del servidor."
+        );
+      }
 
       console.log("Login successful:", data);
 
@@ -88,7 +127,7 @@ function LogInForm() {
           <div className={styles.information}>
             <div className={styles.infoChilds}>
               <h2>Bienvenido de vuelta</h2>
-              <p>Continua tu travesía y alcanza tus metas</p>
+              <p>Continúa tu travesía y alcanza tus metas</p>
               <input
                 type="button"
                 value={"Crear Cuenta"}
@@ -99,7 +138,7 @@ function LogInForm() {
           </div>
           <div className={styles.formInformation}>
             <div className={styles.formInformationChilds}>
-              <h2> Iniciar Sesión</h2>
+              <h2>Iniciar Sesión</h2>
               <form onSubmit={handleLogin}>
                 <div className="input-group mb-3">
                   <span className="input-group-text" id="basic-addon1">
@@ -161,7 +200,7 @@ function LogInForm() {
           </div>
           <div className={styles.formInformation}>
             <div className={styles.formInformationChilds}>
-              <h2> Registrarse</h2>
+              <h2>Registrarse</h2>
               <form>
                 <div className="input-group">
                   <span className="input-group-text">Nombre y Apellido</span>
@@ -185,7 +224,7 @@ function LogInForm() {
                 <br />
                 <div className="input-group mb-3">
                   <input
-                    type="text"
+                    type="email"
                     className="form-control"
                     placeholder="Correo electrónico"
                     aria-label="Email"

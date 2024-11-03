@@ -1,7 +1,6 @@
 //Clase.cjs
-// Clase.cjs
 const { Sequelize, Model, DataTypes } = require("sequelize");
-const sequelize = require("../db.cjs"); // Asegúrate de que la ruta a la conexión de la base de datos es correcta
+const sequelize = require("../db.cjs");
 
 class Clase extends Model {}
 

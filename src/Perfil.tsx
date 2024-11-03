@@ -9,27 +9,28 @@ const Perfil = () => {
   const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
     // Obtener publicaciones del usuario con likes
-    fetch(
-      `http://localhost:3000/api/posts/user/${userId}/withLikes?myId=${userId}`
-    )
+    fetch(`${API_BASE_URL}/api/posts/user/${userId}/withLikes?myId=${userId}`)
       .then((response) => response.json())
       .then((data) => setPosts(data))
       .catch((error) => console.error("Failed to fetch posts:", error));
 
-    // Obtener detalles del usuario, incluyendo nivel y progreso
-    fetch(`http://localhost:3000/api/users/${userId}`)
+    // Obtener info con nivel y progreso de usuari principal
+    fetch(`${API_BASE_URL}/api/users/${userId}`)
       .then((response) => response.json())
       .then((data) => setUserDetails(data))
       .catch((error) => console.error("Failed to fetch user details:", error));
   }, [userId]);
 
-  // Función para manejar el like
+  // Likes
   const handleLike = async (postId, hasLiked) => {
     try {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
       const url = hasLiked
-        ? "http://localhost:3000/api/likes/unlike"
-        : "http://localhost:3000/api/likes/like";
+        ? `${API_BASE_URL}/api/likes/unlike`
+        : `${API_BASE_URL}/api/likes/like`;
 
       const response = await fetch(url, {
         method: "POST",
@@ -45,7 +46,7 @@ const Perfil = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Actualizar el estado de los posts
+        // Actualizar posts
         setPosts((prevPosts) =>
           prevPosts.map((post) =>
             post.id_publicacion === postId
@@ -80,13 +81,19 @@ const Perfil = () => {
     porcentaje_progreso,
   } = userDetails;
 
+  // Definir API_BASE_URL
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   return (
     <div className={styles.perfil}>
       <div className={styles.profileBackgroundContainer}>
         <section className={styles.profileContainer}>
           <div className={styles.profileSidebar}>
             <div className={styles.profileAvatar}>
-              <img src={avatar || man_avatar_2} alt="Usuario Avatar" />
+              <img
+                src={avatar ? `${API_BASE_URL}/${avatar}` : man_avatar_2}
+                alt="Usuario Avatar"
+              />
               <h2>
                 {nombre_user} {apellido_user}
               </h2>
@@ -111,7 +118,7 @@ const Perfil = () => {
                 >
                   {post.cont_media && (
                     <img
-                      src={post.cont_media}
+                      src={`${API_BASE_URL}/${post.cont_media}`}
                       alt="Post"
                       className={styles.postImage}
                     />

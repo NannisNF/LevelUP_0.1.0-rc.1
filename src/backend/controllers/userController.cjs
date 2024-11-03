@@ -44,12 +44,7 @@ exports.getUserDetails = async (req, res) => {
 exports.updateUserDetails = async (req, res) => {
   try {
     const { userId } = req.params;
-    const {
-      nombre_user,
-      apellido_user,
-      username,
-      pass, // Nueva contraseña si se proporciona
-    } = req.body;
+    const { nombre_user, apellido_user, username, pass } = req.body;
 
     // Buscar al usuario por ID
     const user = await Usuarios.findByPk(userId);

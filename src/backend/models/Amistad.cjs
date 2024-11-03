@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../db.cjs");
-const Usuarios = require("./Usuarios.cjs"); // Asegúrate de que esta importación no cree un ciclo.
+const Usuarios = require("./Usuarios.cjs");
 
 class Amistad extends Model {}
 
@@ -33,7 +33,6 @@ Amistad.init(
   }
 );
 
-// Establecer relaciones aquí
 Amistad.belongsTo(Usuarios, { foreignKey: "id_user1", as: "Sender" });
 Amistad.belongsTo(Usuarios, { foreignKey: "id_user2", as: "Receiver" });
 

@@ -6,7 +6,7 @@ function NavBar() {
   return (
     <nav className={styles.navbarCustom}>
       <div className="container-fluid">
-        <a className={styles.brand} href="http://localhost:5173/Inicio">
+        <a className={styles.brand} href="/Inicio">
           <img
             src={minilogo}
             alt="Logo"

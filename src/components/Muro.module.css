@@ -10,7 +10,7 @@
 }
 
 .containerDashboard {
-  margin-top: 5px; /* Reduced the margin */
+  margin-top: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,18 +28,18 @@
 }
 .postsContainer {
   background-color: #0d0b19;
-  max-height: 80vh; /* Ajusta según necesites */
+  max-height: 80vh;
   overflow-y: auto;
   width: 100%;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  /* Ocultar la barra de scroll en Chrome, Safari y Edge */
-  scrollbar-width: none; /* Para Firefox */
+
+  scrollbar-width: none;
   padding: 20px;
   border-radius: 10px;
 }
 
 .postsContainer::-webkit-scrollbar {
-  display: none; /* Para Chrome, Safari y Edge */
+  display: none;
 }
 
 .postAuthor {
@@ -66,7 +66,7 @@
   height: auto; /* La altura se ajustará para mantener la proporción */
   object-fit: contain; /* Mantiene toda la imagen visible sin recortes */
   border-radius: 10px; /* Bordes redondeados para mantener el diseño */
-  margin-bottom: 10px; /* Añadir un pequeño margen inferior para separación */
+  margin-bottom: 10px;
 }
 
 .postContent {

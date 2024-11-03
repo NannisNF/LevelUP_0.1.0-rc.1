@@ -57,11 +57,12 @@ function AvatarForm({ formData }: AvatarFormProps) {
   const toggleAvatars = () => {
     setShowMaleAvatars(!showMaleAvatars);
   };
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const handleConfirmAvatar = async () => {
     if (selectedAvatar) {
       try {
-        const response = await fetch("http://localhost:3000/api/register", {
+        const response = await fetch(`${API_BASE_URL}/api/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -111,7 +112,10 @@ function AvatarForm({ formData }: AvatarFormProps) {
               }`}
               onClick={() => handleAvatarSelect(avatar)}
             >
-              <img src={avatar.imageUrl} alt={avatar.name} />
+              <img
+                src={avatarUrl ? `${API_BASE_URL}/${avatarUrl}` : defaultAvatar}
+                alt={avatar.name}
+              />
               <h5 className={styles.cardName}>{avatar.name}</h5>
             </div>
           </div>

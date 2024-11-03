@@ -1,11 +1,11 @@
 // friendController.cjs
 const Amistad = require("../models/Amistad.cjs");
-const Usuarios = require("../models/Usuarios.cjs"); // Ajuste en la importación
+const Usuarios = require("../models/Usuarios.cjs");
 const Sequelize = require("sequelize");
 const Avatares = require("../models/Avatares.cjs");
 const TournamentParticipant = require("../models/TournamentParticipant.cjs");
 const Tournament = require("../models/Tournament.cjs");
-const { Op } = Sequelize; // Importación de Op
+const { Op } = Sequelize;
 
 const sendFriendRequest = async (req, res) => {
   const { id_user1, id_user2 } = req.body;
@@ -188,7 +188,7 @@ const searchFriends = async (req, res) => {
       return res.status(200).json([]);
     }
 
-    // Buscar entre los amigos cuyos usernames coincidan con el término de búsqueda
+    // Buscar entre los amigos cuyos usernames coincidan con el termino de busqueda
     const friends = await Usuarios.findAll({
       where: {
         id_usuario: friendIds,

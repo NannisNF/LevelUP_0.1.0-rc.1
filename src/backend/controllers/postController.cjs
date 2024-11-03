@@ -28,7 +28,7 @@ const upload = multer({ storage: storage });
 const createPost = async (req, res) => {
   const { uid_post, post_hid, cont_text } = req.body;
   const cont_media = req.file
-    ? `http://localhost:3000/uploads/${req.file.filename}`
+    ? `${req.protocol}://${req.headers.host}/uploads/${req.file.filename}`
     : null;
 
   try {

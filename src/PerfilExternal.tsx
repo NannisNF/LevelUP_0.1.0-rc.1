@@ -22,9 +22,11 @@ const PerfilExternal = () => {
           throw new Error("IDs de usuario inválidos");
         }
 
-        // Obtener detalles del usuario
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+        // Obtener info del usuario
         const userResponse = await fetch(
-          `http://localhost:3000/api/users/${parsedUserId}`
+          `${API_BASE_URL}/api/users/${parsedUserId}`
         );
         if (!userResponse.ok) throw new Error("Failed to fetch user data");
         const userData = await userResponse.json();
@@ -32,7 +34,7 @@ const PerfilExternal = () => {
 
         // Obtener publicaciones del usuario con likes
         const postsResponse = await fetch(
-          `http://localhost:3000/api/posts/user/${parsedUserId}/withLikes?myId=${myId}`
+          `${API_BASE_URL}/api/posts/user/${parsedUserId}/withLikes?myId=${myId}`
         );
         if (!postsResponse.ok) throw new Error("Failed to fetch posts");
         const postsData = await postsResponse.json();
@@ -40,7 +42,7 @@ const PerfilExternal = () => {
 
         // Obtener estado de amistad
         const statusResponse = await fetch(
-          `http://localhost:3000/api/friends/status/${myId}/${parsedUserId}`
+          `${API_BASE_URL}/api/friends/status/${myId}/${parsedUserId}`
         );
         if (!statusResponse.ok)
           throw new Error("Failed to fetch friendship status");
@@ -61,9 +63,10 @@ const PerfilExternal = () => {
 
   const handleLike = async (postId, hasLiked) => {
     try {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
       const url = hasLiked
-        ? "http://localhost:3000/api/likes/unlike"
-        : "http://localhost:3000/api/likes/like";
+        ? `${API_BASE_URL}/api/likes/unlike`
+        : `${API_BASE_URL}/api/likes/like`;
 
       const response = await fetch(url, {
         method: "POST",
@@ -79,7 +82,7 @@ const PerfilExternal = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Actualizar el estado de los posts
+        // Actualizar posts
         setPosts((prevPosts) =>
           prevPosts.map((post) =>
             post.id_publicacion === postId
@@ -101,6 +104,56 @@ const PerfilExternal = () => {
     }
   };
 
+  const handleFriendAction = async (action) => {
+    try {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+      let url = "";
+      let method = "POST";
+      let body = {
+        senderId: myId,
+        receiverId: parseInt(userId, 10),
+      };
+
+      if (action === "add") {
+        url = `${API_BASE_URL}/api/friends/sendRequest`;
+      } else if (action === "accept") {
+        url = `${API_BASE_URL}/api/friends/acceptRequest`;
+      } else if (action === "reject") {
+        url = `${API_BASE_URL}/api/friends/rejectRequest`;
+      } else if (action === "remove") {
+        url = `${API_BASE_URL}/api/friends/removeFriend`;
+      }
+
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Actualizar estado amistad
+        if (action === "add") {
+          setFriendshipStatus("pending");
+          setIsReceiver(false);
+        } else if (action === "accept") {
+          setFriendshipStatus("accepted");
+        } else if (action === "reject") {
+          setFriendshipStatus("none");
+        } else if (action === "remove") {
+          setFriendshipStatus("none");
+        }
+      } else {
+        console.error("Error en la acción de amistad:", data.message);
+      }
+    } catch (error) {
+      console.error("Error en la acción de amistad:", error);
+    }
+  };
+
   if (!user) return <div>Cargando...</div>;
 
   return (
@@ -115,7 +168,7 @@ const PerfilExternal = () => {
               </h2>
               <p>@{user.username}</p>
               <p>Nivel {user.nivel_user}</p>
-              {/* Botones de amistad */}
+              {/* Botones de amistad uwu */}
               {friendshipStatus === "none" && (
                 <AddFriendButton onClick={() => handleFriendAction("add")}>
                   Agregar Amigo
@@ -137,8 +190,16 @@ const PerfilExternal = () => {
                   )}
                 </>
               )}
-              {friendshipStatus === "accepted" && <p>Ya son amigos</p>}
-              {friendshipStatus === "rejected" && <p>Solicitud rechazada</p>}
+              {friendshipStatus === "accepted" && (
+                <button onClick={() => handleFriendAction("remove")}>
+                  Eliminar Amigo
+                </button>
+              )}
+              {friendshipStatus === "rejected" && (
+                <button onClick={() => handleFriendAction("add")}>
+                  Enviar Nueva Solicitud
+                </button>
+              )}
             </div>
           </div>
           <div className={styles.profilePosts}>

@@ -209,7 +209,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  z-index: 100; /* Para asegurarte de que se muestre sobre otros elementos */
+  z-index: 100;
 }
 
 .recommendationsDropdown li {

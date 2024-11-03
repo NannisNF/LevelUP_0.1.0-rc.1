@@ -28,7 +28,7 @@ Notification.init(
       type: DataTypes.STRING,
     },
     data: {
-      type: DataTypes.JSON, // Para almacenar datos adicionales
+      type: DataTypes.JSON,
     },
     read_status: {
       type: DataTypes.BOOLEAN,

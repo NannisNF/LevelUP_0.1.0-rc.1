@@ -9,7 +9,6 @@ router.post(
   postController.createPost
 );
 
-// Ruta para obtener todas las publicaciones
 router.get("/", postController.getPosts);
 router.get("/user/:userId", postController.getPostsByUserId);
 router.get("/friends/:userId", postController.getPostsFromFriends);

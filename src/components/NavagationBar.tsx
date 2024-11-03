@@ -6,13 +6,15 @@ import carta from "./img/carta.png";
 import minilogo from "./img/minilogo.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import { Link } from "react-router-dom";
-import styles from "./NavagationBar.module.css"; // Importa el módulo CSS
+import { Link, useNavigate } from "react-router-dom";
+import styles from "./NavagationBar.module.css";
 
 function NavagationBar() {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
   const avatarUrl = localStorage.getItem("avatar_url");
+  const navigate = useNavigate();
 
   // Estados
   const [friendRequests, setFriendRequests] = useState([]);
@@ -22,10 +24,14 @@ function NavagationBar() {
   // Cálculo del total de notificaciones
   const totalNotifications =
     friendRequests.length + tournamentInvitations.length + notifications.length;
+
   const searchContainerRef = useRef(null);
+
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
   };
+
+  const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -39,14 +45,12 @@ function NavagationBar() {
     return () => clearTimeout(delayDebounce);
   }, [search]);
 
-  // useEffect para solicitudes de amistad
   useEffect(() => {
     const fetchFriendRequests = async () => {
-      const userId = localStorage.getItem("user_id");
       if (!userId) return;
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/friends/requests/${userId}`
+          `${API_BASE_URL}/api/friends/requests/${userId}`
         );
         if (response.data) {
           setFriendRequests(response.data);
@@ -57,15 +61,13 @@ function NavagationBar() {
     };
 
     fetchFriendRequests();
-  }, []);
+  }, [API_BASE_URL, userId]);
 
-  // Funciones para aceptar/rechazar invitaciones a torneos
   const fetchTournamentInvitations = async () => {
-    const userId = localStorage.getItem("user_id");
     if (!userId) return;
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/tournaments/invitations/${userId}`
+        `${API_BASE_URL}/api/tournaments/invitations/${userId}`
       );
       if (response.data) {
         setTournamentInvitations(response.data);
@@ -77,12 +79,12 @@ function NavagationBar() {
 
   useEffect(() => {
     fetchTournamentInvitations();
-  }, []);
+  }, [API_BASE_URL, userId]);
 
   const handleAcceptTournament = async (tournamentId) => {
-    const userId = localStorage.getItem("user_id");
+    if (!userId) return;
     try {
-      await axios.post("http://localhost:3000/api/tournaments/accept", {
+      await axios.post(`${API_BASE_URL}/api/tournaments/accept`, {
         user_id: userId,
         tournament_id: tournamentId,
       });
@@ -90,13 +92,14 @@ function NavagationBar() {
       fetchTournamentInvitations();
     } catch (error) {
       console.error("Error accepting tournament invitation", error);
+      alert("Error al aceptar la invitación al torneo.");
     }
   };
 
   const handleRejectTournament = async (tournamentId) => {
-    const userId = localStorage.getItem("user_id");
+    if (!userId) return;
     try {
-      await axios.post("http://localhost:3000/api/tournaments/reject", {
+      await axios.post(`${API_BASE_URL}/api/tournaments/reject`, {
         user_id: userId,
         tournament_id: tournamentId,
       });
@@ -104,32 +107,30 @@ function NavagationBar() {
       fetchTournamentInvitations();
     } catch (error) {
       console.error("Error rejecting tournament invitation", error);
+      alert("Error al rechazar la invitación al torneo.");
     }
   };
 
   const fetchResults = async () => {
-    const userId = localStorage.getItem("user_id");
-    console.log("Fetching results for user:", userId);
+    if (!userId) return;
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/search/users?name=${search}&iuserId=${userId}`
+        `${API_BASE_URL}/api/search/users?name=${search}&iuserId=${userId}`
       );
-      console.log("Results:", response.data);
       setResults(response.data);
     } catch (error) {
       console.error("Error fetching users", error);
     }
   };
+
   useEffect(() => {
     const fetchNotifications = async () => {
-      const userId = localStorage.getItem("user_id");
       if (!userId) return;
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/notifications/${userId}`
+          `${API_BASE_URL}/api/notifications/${userId}`
         );
         if (response.data) {
-          // Si 'data' es un string JSON, parsearlo
           const parsedNotifications = response.data.map((notif) => ({
             ...notif,
             data:
@@ -145,27 +146,27 @@ function NavagationBar() {
     };
 
     fetchNotifications();
-  }, []);
+  }, [API_BASE_URL, userId]);
 
   const handleNotificationClick = async (notification) => {
     const { type, data } = notification;
     if (type === "tournament_result") {
       if (data.result === "win") {
-        window.open("/Ganar", "_blank");
+        navigate("/Ganar");
       } else if (data.result === "lose") {
-        window.open("/Perder", "_blank");
+        navigate("/Perder");
       } else if (data.result === "tie") {
-        window.open("/Empatar", "_blank");
+        navigate("/Empatar");
       }
     } else if (type === "habit_completed") {
-      window.open("/finHabit", "_blank");
+      navigate("/finHabit");
     } else if (type === "level_up") {
-      window.open("/nextLevel", "_blank"); // Redirige a la nueva ventana
+      navigate("/nextLevel");
     }
 
     try {
       await axios.put(
-        `http://localhost:3000/api/notifications/read/${notification.id_notification}`
+        `${API_BASE_URL}/api/notifications/read/${notification.id_notification}`
       );
       setNotifications((prevNotifications) =>
         prevNotifications.filter(
@@ -200,7 +201,7 @@ function NavagationBar() {
         className="d-flex justify-content-between align-items-center"
         style={{ width: "100%" }}
       >
-        <a className={styles.brandNav} href="http://localhost:5173/Muro">
+        <Link className={styles.brandNav} to="/Muro">
           <img
             src={minilogo}
             alt="Logo"
@@ -208,11 +209,10 @@ function NavagationBar() {
             className="d-inline-block align-text-top"
           />
           LevelUP
-        </a>
+        </Link>
 
         <div
-          className="d-flex mx-auto"
-          style={{ width: "50%", position: "relative" }}
+          className={`d-flex mx-auto ${styles.searchContainer}`}
           ref={searchContainerRef}
         >
           <input
@@ -225,10 +225,14 @@ function NavagationBar() {
           />
           {search.trim() && results.length > 0 && (
             <ul className={styles.searchResults}>
-              {results.map((user, index) => (
-                <li key={index} className={styles.searchResultItem}>
+              {results.map((user) => (
+                <li key={user.id_usuario} className={styles.searchResultItem}>
                   <img
-                    src={user.avatar?.avatar || man_avatar_2}
+                    src={
+                      user.avatar?.avatar
+                        ? `${API_BASE_URL}/${user.avatar.avatar}`
+                        : man_avatar_2
+                    }
                     alt="Avatar"
                     width="30"
                     height="30"
@@ -320,7 +324,11 @@ function NavagationBar() {
                   >
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <img
-                        src={invitation.creatorAvatar || man_avatar_2}
+                        src={
+                          invitation.creatorAvatar
+                            ? `${API_BASE_URL}/${invitation.creatorAvatar}`
+                            : man_avatar_2
+                        }
                         alt="Avatar"
                         width="30"
                         height="30"
@@ -377,7 +385,7 @@ function NavagationBar() {
               }}
             >
               <img
-                src={avatarUrl || man_avatar_2}
+                src={avatarUrl ? `${API_BASE_URL}/${avatarUrl}` : man_avatar_2}
                 alt="Avatar"
                 width="40"
                 height="40"
@@ -386,44 +394,44 @@ function NavagationBar() {
             </button>
             <ul className="dropdown-menu dropdown-menu-end">
               <li>
-                <a
+                <Link
                   className={`dropdown-item ${styles.customDropdownItem}`}
-                  href="http://localhost:5173/Perfil"
+                  to="/Perfil"
                 >
                   Perfil
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   className={`dropdown-item ${styles.customDropdownItem}`}
-                  href="http://localhost:5173/Muro"
+                  to="/Muro"
                 >
                   Muro
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   className={`dropdown-item ${styles.customDropdownItem}`}
-                  href="http://localhost:5173/Torneos"
+                  to="/Torneos"
                 >
                   Torneos
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   className={`dropdown-item ${styles.customDropdownItem}`}
-                  href="http://localhost:5173/Habitos"
+                  to="/Habitos"
                 >
                   Mis hábitos
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   className={`dropdown-item ${styles.customDropdownItem}`}
-                  href="http://localhost:5173/Cuenta"
+                  to="/Cuenta"
                 >
                   Cuenta
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

@@ -1,6 +1,6 @@
 //LogInController
 const Usuarios = require("../models/Usuarios.cjs");
-const Avatares = require("../models/Avatares.cjs"); // Asegúrate de tener el modelo de la tabla de avatares
+const Avatares = require("../models/Avatares.cjs");
 const bcrypt = require("bcrypt");
 const loginUser = async (req, res) => {
   const { username, password } = req.body;
@@ -12,8 +12,8 @@ const loginUser = async (req, res) => {
       include: [
         {
           model: Avatares, // Relacionamos con el modelo de avatares
-          as: "avatar", // El alias que hayas definido en la relación
-          attributes: ["avatar"], // Solo queremos el campo 'avatar' que contiene la URL
+          as: "avatar",
+          attributes: ["avatar"],
         },
       ],
     });
