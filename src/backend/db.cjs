@@ -2,12 +2,12 @@
 const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize(
-  "nombre_base_de_datos",
-  "usuario",
-  "contraseña",
+  "leveluprailway",
+  "root",
+  "cpcSBYpOGxOSUvmVzboADQjjVqTYFrWw",
   {
-    host: "nombre_host",
-    port: 3306, // O el puerto proporcionado por Railway
+    host: "junction.proxy.rlwy.net",
+    port: 56567,
     dialect: "mysql",
   }
 );

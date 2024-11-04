@@ -1,4 +1,5 @@
 //index.cjs
+require("dotenv").config(); //para url de archivo env
 const cron = require("node-cron");
 const Habitos = require("./models/Habitos.cjs");
 const Usuarios = require("./models/Usuarios.cjs");
@@ -26,7 +27,7 @@ const likeRoutes = require("./routes/likes.cjs");
 
 const app = express();
 
-const allowedOrigin = "https://tu-dominio-frontend.com"; //URL de frontend
+const allowedOrigin = process.env.FRONTEND_URL || "http://localhost:5173";
 
 app.use(
   cors({
