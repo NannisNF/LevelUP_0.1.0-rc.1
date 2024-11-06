@@ -1,5 +1,5 @@
 //Perder.tsx
-import { useState, useEffect } from "react";
+
 import espadas from "./img/espadas.png";
 import styles from "./Perder.module.css";
 import lossImage from "./img/loss.png";

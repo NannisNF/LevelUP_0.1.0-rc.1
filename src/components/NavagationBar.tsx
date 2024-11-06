@@ -8,26 +8,53 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./NavagationBar.module.css";
+interface Notification {
+  id_notification: number;
+  message: string;
+  data: any;
+  type: string;
+}
+interface User {
+  id_usuario: number;
+  username: string;
+  avatar: {
+    avatar: string;
+  } | null;
+}
+
+interface FriendRequest {
+  id_amistad: number;
+  senderId: number;
+  senderUsername: string;
+}
+
+interface TournamentInvitation {
+  tournament_id: number;
+  creatorAvatar: string | null;
+  creatorUsername: string;
+}
 
 function NavagationBar() {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [search, setSearch] = useState("");
-  const [results, setResults] = useState([]);
   const avatarUrl = localStorage.getItem("avatar_url");
   const navigate = useNavigate();
 
   // Estados
-  const [friendRequests, setFriendRequests] = useState([]);
-  const [tournamentInvitations, setTournamentInvitations] = useState([]);
-  const [notifications, setNotifications] = useState([]);
+  const [results, setResults] = useState<User[]>([]);
+  const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
+  const [tournamentInvitations, setTournamentInvitations] = useState<
+    TournamentInvitation[]
+  >([]);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
   // Cálculo del total de notificaciones
   const totalNotifications =
     friendRequests.length + tournamentInvitations.length + notifications.length;
 
-  const searchContainerRef = useRef(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
@@ -49,7 +76,7 @@ function NavagationBar() {
     const fetchFriendRequests = async () => {
       if (!userId) return;
       try {
-        const response = await axios.get(
+        const response = await axios.get<FriendRequest[]>(
           `${API_BASE_URL}/api/friends/requests/${userId}`
         );
         if (response.data) {
@@ -66,7 +93,7 @@ function NavagationBar() {
   const fetchTournamentInvitations = async () => {
     if (!userId) return;
     try {
-      const response = await axios.get(
+      const response = await axios.get<TournamentInvitation[]>(
         `${API_BASE_URL}/api/tournaments/invitations/${userId}`
       );
       if (response.data) {
@@ -81,7 +108,7 @@ function NavagationBar() {
     fetchTournamentInvitations();
   }, [API_BASE_URL, userId]);
 
-  const handleAcceptTournament = async (tournamentId) => {
+  const handleAcceptTournament = async (tournamentId: number) => {
     if (!userId) return;
     try {
       await axios.post(`${API_BASE_URL}/api/tournaments/accept`, {
@@ -96,7 +123,7 @@ function NavagationBar() {
     }
   };
 
-  const handleRejectTournament = async (tournamentId) => {
+  const handleRejectTournament = async (tournamentId: number) => {
     if (!userId) return;
     try {
       await axios.post(`${API_BASE_URL}/api/tournaments/reject`, {
@@ -114,7 +141,7 @@ function NavagationBar() {
   const fetchResults = async () => {
     if (!userId) return;
     try {
-      const response = await axios.get(
+      const response = await axios.get<User[]>(
         `${API_BASE_URL}/api/search/users?name=${search}&iuserId=${userId}`
       );
       setResults(response.data);
@@ -127,17 +154,19 @@ function NavagationBar() {
     const fetchNotifications = async () => {
       if (!userId) return;
       try {
-        const response = await axios.get(
+        const response = await axios.get<Notification[]>(
           `${API_BASE_URL}/api/notifications/${userId}`
         );
         if (response.data) {
-          const parsedNotifications = response.data.map((notif) => ({
-            ...notif,
-            data:
-              typeof notif.data === "string"
-                ? JSON.parse(notif.data)
-                : notif.data,
-          }));
+          const parsedNotifications = response.data.map(
+            (notif: Notification) => ({
+              ...notif,
+              data:
+                typeof notif.data === "string"
+                  ? JSON.parse(notif.data)
+                  : notif.data,
+            })
+          );
           setNotifications(parsedNotifications);
         }
       } catch (error) {
@@ -148,7 +177,7 @@ function NavagationBar() {
     fetchNotifications();
   }, [API_BASE_URL, userId]);
 
-  const handleNotificationClick = async (notification) => {
+  const handleNotificationClick = async (notification: Notification) => {
     const { type, data } = notification;
     if (type === "tournament_result") {
       if (data.result === "win") {
@@ -179,10 +208,10 @@ function NavagationBar() {
   };
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (
         searchContainerRef.current &&
-        !searchContainerRef.current.contains(event.target)
+        !searchContainerRef.current.contains(event.target as Node)
       ) {
         setResults([]);
       }

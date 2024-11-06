@@ -1,23 +1,38 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./components/Torneos.module.css";
 import espadas from "./components/img/espadas.png";
 import man_avatar_2 from "./components/img/avatars/man_avatar_2.png";
 
+interface User {
+  id_usuario: number;
+  username: string | null;
+  avatar: string | null;
+}
+
 function Torneos() {
   const [view, setView] = useState("initial");
   const [search, setSearch] = useState("");
-  const [results, setResults] = useState([]);
-  const [selectedParticipants, setSelectedParticipants] = useState([]);
-  const userId = localStorage.getItem("user_id");
-  const userUsername = localStorage.getItem("username");
-  const userAvatar = localStorage.getItem("avatar_url");
-  const [activeTournament, setActiveTournament] = useState(null);
-  const [participants, setParticipants] = useState([]);
-
-  const handleSearchChange = (e) => {
+  const [results, setResults] = useState<User[]>([]);
+  const [selectedParticipants, setSelectedParticipants] = useState<User[]>([]);
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
+  const userId = localStorage.getItem("user_id");
+  if (!userId) {
+    console.error("User ID is null");
+    return <div>Error: Usuario no autenticado</div>;
+  }
+
+  const userUsername = localStorage.getItem("username");
+  if (!userUsername) {
+    console.error("User username is null");
+    return <div>Error: Usuario sin nombre de usuario</div>;
+  }
+  const userAvatar = localStorage.getItem("avatar_url");
+
+  const [activeTournament, setActiveTournament] = useState<any>(null);
+  const [participants, setParticipants] = useState<User[]>([]);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -43,13 +58,18 @@ function Torneos() {
         setActiveTournament(response.data.tournament);
         setParticipants(response.data.participants);
         setView("participants"); // Vista de participantes
-      } catch (error) {
-        // Si el usuario no tiene un torneo activo, aparece la barra de busqueda
-        setView("initial");
-        console.error(
-          "No tienes torneos activos:",
-          error.response?.data?.message
-        );
+      } catch (error: any) {
+        if (axios.isAxiosError(error)) {
+          // Si el usuario no tiene un torneo activo, aparece la barra de busqueda
+          setView("initial");
+          console.error(
+            "No tienes torneos activos:",
+            error.response?.data?.message
+          );
+        } else {
+          // Manejo de otros tipos de errores
+          console.error("Error desconocido:", error);
+        }
       }
     };
 
@@ -70,7 +90,7 @@ function Torneos() {
     }
   };
 
-  const handleSelectUser = (user) => {
+  const handleSelectUser = (user: User) => {
     if (selectedParticipants.length >= 4) {
       alert("No puedes seleccionar más de 4 usuarios");
       return;
@@ -85,7 +105,7 @@ function Torneos() {
     }
   };
 
-  const handleRemoveParticipant = (userId) => {
+  const handleRemoveParticipant = (userId: number) => {
     setSelectedParticipants(
       selectedParticipants.filter((p) => p.id_usuario !== userId)
     );
@@ -94,18 +114,19 @@ function Torneos() {
   const handleConfirm = async () => {
     const participantIds = selectedParticipants.map((p) => p.id_usuario);
     const betAmount = 400;
-
+    const userId = localStorage.getItem("user_id");
+    if (!userId) {
+      console.error("User ID is null");
+      return <div>Error: Usuario no autenticado</div>;
+    }
     try {
       const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-      const response = await axios.post(
-        `${API_BASE_URL}/api/tournaments/create`,
-        {
-          creator_id: parseInt(userId, 10),
-          participant_ids: participantIds,
-          bet_amount: betAmount,
-        }
-      );
+      await axios.post(`${API_BASE_URL}/api/tournaments/create`, {
+        creator_id: parseInt(userId, 10),
+        participant_ids: participantIds,
+        bet_amount: betAmount,
+      });
 
       // Incluir al creador del torneo en la lista de participantes
       const creator = {
@@ -163,7 +184,7 @@ function Torneos() {
                         className={styles.searchResultItem}
                       >
                         <img
-                          src={user.avatar?.avatar || man_avatar_2}
+                          src={user.avatar || man_avatar_2}
                           alt="Avatar"
                           width="30"
                           height="30"
@@ -182,7 +203,7 @@ function Torneos() {
                       className={styles.participantItem}
                     >
                       <img
-                        src={user.avatar?.avatar || man_avatar_2}
+                        src={user.avatar || man_avatar_2}
                         alt="Avatar"
                         width="30"
                         height="30"

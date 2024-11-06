@@ -1,12 +1,35 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styles from "./components/Perfil.module.css";
 import PostButton from "./components/PostButton";
 import man_avatar_2 from "./components/img/avatars/man_avatar_2.png";
 
+interface Post {
+  id_publicacion: number;
+  cont_media: string | null;
+  cont_text: string | null;
+  hasLiked: boolean;
+  likesCount: number;
+}
+
+interface UserDetails {
+  nombre_user: string;
+  apellido_user: string;
+  username: string;
+  avatar: string | null;
+  nivel_user: number;
+  porcentaje_progreso: number;
+}
+
 const Perfil = () => {
-  const [posts, setPosts] = useState([]);
-  const [userDetails, setUserDetails] = useState(null);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+
   const userId = localStorage.getItem("user_id");
+
+  if (!userId) {
+    console.error("User ID is null");
+    return <div>Error: Usuario no autenticado</div>;
+  }
 
   useEffect(() => {
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -25,7 +48,7 @@ const Perfil = () => {
   }, [userId]);
 
   // Likes
-  const handleLike = async (postId, hasLiked) => {
+  const handleLike = async (postId: number, hasLiked: boolean) => {
     try {
       const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
       const url = hasLiked

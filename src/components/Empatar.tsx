@@ -1,5 +1,4 @@
 // Empatar.tsx
-import { useState, useEffect } from "react";
 import espadas from "./img/espadas.png";
 import tieImage from "./img/tie.png";
 import styles from "./Empatar.module.css";

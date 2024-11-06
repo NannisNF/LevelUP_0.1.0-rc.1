@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import espadas from "./img/espadas.png";
 import finHabit from "./img/finHabit.png";
 import styles from "./finHabit.module.css";

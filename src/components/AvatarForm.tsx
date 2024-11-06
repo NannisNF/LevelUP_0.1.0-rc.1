@@ -113,7 +113,11 @@ function AvatarForm({ formData }: AvatarFormProps) {
               onClick={() => handleAvatarSelect(avatar)}
             >
               <img
-                src={avatarUrl ? `${API_BASE_URL}/${avatarUrl}` : defaultAvatar}
+                src={
+                  avatar.imageUrl
+                    ? `${API_BASE_URL}/${avatar.imageUrl}`
+                    : man_avatar_2
+                }
                 alt={avatar.name}
               />
               <h5 className={styles.cardName}>{avatar.name}</h5>

@@ -1,7 +1,13 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./components/Cuenta.module.css";
 import man_avatar_2 from "./components/img/avatars/man_avatar_2.png";
+
+interface Friend {
+  id_usuario: number;
+  avatar: string | null;
+  username: string;
+}
 
 function Cuenta() {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -10,6 +16,7 @@ function Cuenta() {
   const [showFriendsList, setShowFriendsList] = useState(false);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const navigate = useNavigate();
+  const [friends, setFriends] = useState<Friend[]>([]);
   const [userInfo, setUserInfo] = useState({
     nombre: "",
     apellido: "",
@@ -17,7 +24,6 @@ function Cuenta() {
   });
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [friends, setFriends] = useState([]);
 
   useEffect(() => {
     if (!userId) {
@@ -38,7 +44,7 @@ function Cuenta() {
       .catch((err) => console.error(err));
   }, [userId]);
 
-  const handleDeleteFriend = (id) => {
+  const handleDeleteFriend = (id: number) => {
     const confirmation = window.confirm(
       "¿Estás seguro de eliminar a este amigo?"
     );
@@ -48,7 +54,7 @@ function Cuenta() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId: parseInt(userId, 10), friendId: id }),
+        body: JSON.stringify({ userId: parseInt(userId!, 10), friendId: id }),
       })
         .then((res) => {
           if (res.ok) {
@@ -99,7 +105,7 @@ function Cuenta() {
     setIsEditingProfile(true);
   };
 
-  const handleSaveProfile = (e) => {
+  const handleSaveProfile = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!userInfo.nombre || !userInfo.apellido || !userInfo.username) {
@@ -140,7 +146,7 @@ function Cuenta() {
       .catch((err) => console.error(err));
   };
 
-  const handleProfileChange = (e) => {
+  const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
 

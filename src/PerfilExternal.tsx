@@ -1,27 +1,53 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import man_avatar_2 from "./components/img/avatars/man_avatar_2.png";
 import AddFriendButton from "./components/AddFriendButton";
 import styles from "./components/Perfil.module.css";
 
+type FriendAction = "add" | "accept" | "reject" | "remove";
+
+interface Post {
+  id_publicacion: number;
+  cont_media: string | null;
+  cont_text: string | null;
+  hasLiked: boolean;
+  likesCount: number;
+}
+
+interface User {
+  avatar: string | null;
+  nombre_user: string;
+  apellido_user: string;
+  username: string;
+  nivel_user: number;
+}
 const PerfilExternal = () => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const { userId } = useParams();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [friendshipStatus, setFriendshipStatus] = useState("none");
   const [isReceiver, setIsReceiver] = useState(false);
   const myIdString = localStorage.getItem("user_id");
+  if (!myIdString) {
+    console.error("User ID is null");
+    return <div>Error: Usuario no autenticado</div>;
+  }
+
   const myId = parseInt(myIdString, 10);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (!userId) {
+          console.error("User ID from params is undefined");
+          return;
+        }
+
         const parsedUserId = parseInt(userId, 10);
 
         if (isNaN(parsedUserId) || isNaN(myId)) {
           throw new Error("IDs de usuario inválidos");
         }
-
         const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
         // Obtener info del usuario
@@ -61,7 +87,7 @@ const PerfilExternal = () => {
     }
   }, [userId, myId]);
 
-  const handleLike = async (postId, hasLiked) => {
+  const handleLike = async (postId: number, hasLiked: boolean) => {
     try {
       const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
       const url = hasLiked
@@ -104,9 +130,14 @@ const PerfilExternal = () => {
     }
   };
 
-  const handleFriendAction = async (action) => {
+  const handleFriendAction = async (action: FriendAction) => {
     try {
       const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+      if (!userId) {
+        console.error("User ID from params is undefined");
+        return;
+      }
+
       let url = "";
       let method = "POST";
       let body = {

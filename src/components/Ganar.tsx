@@ -1,5 +1,5 @@
 //Ganar.tsx
-import { useState, useEffect } from "react";
+
 import espadas from "./img/espadas.png";
 import winImage from "./img/win.png";
 import styles from "./Ganar.module.css";

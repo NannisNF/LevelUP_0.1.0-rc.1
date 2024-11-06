@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import PostForm from "./components/PostForm";
 import styles from "./components/Post.module.css";

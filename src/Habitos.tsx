@@ -4,19 +4,39 @@ import styles from "./components/Habits.module.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
+interface Habit {
+  id_habito: number;
+  titulo: string;
+  descripcion: string;
+  inicio_habit: string;
+  fin_habit: string;
+  status_habito: string;
+  image?: string;
+  xp_habito: number;
+  clase_habit: number;
+}
+
+interface Recommendation {
+  id_predeterminado: number;
+  titulo: string;
+  descripcion: string;
+  clase_pred_habit: number;
+  xp_pred_habit: number;
+}
+
 function Habitos() {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [view, setView] = useState("habitList");
-  const [selectedHabit, setSelectedHabit] = useState(null);
+  const [selectedHabit, setSelectedHabit] = useState<Habit | null>(null);
   const [showForm, setShowForm] = useState(false);
-  const [habits, setHabits] = useState([]);
+  const [habits, setHabits] = useState<Habit[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [classHabit, setClassHabit] = useState("1");
-  const [xpHabit, setXpHabit] = useState("750");
-  const [recommendations, setRecommendations] = useState([]);
+  const [xpHabit, setXpHabit] = useState<string>("750");
+  const [classHabit, setClassHabit] = useState<string>("1");
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [showRecommendations, setShowRecommendations] = useState(false);
 
   useEffect(() => {
@@ -48,7 +68,7 @@ function Habitos() {
     setView("addHabit");
   };
 
-  const handleSelectHabit = (habit) => {
+  const handleSelectHabit = (habit: Habit) => {
     setSelectedHabit(habit);
     setView("habitDetail");
   };
@@ -99,7 +119,7 @@ function Habitos() {
         throw new Error(`Failed to create habit: ${response.statusText}`);
       }
       // Actualizar la lista
-      const newHabit = await response.json();
+      const newHabit: Habit = await response.json();
       setHabits([...habits, newHabit]);
       setShowForm(false);
       setView("habitList");
@@ -226,7 +246,7 @@ function Habitos() {
     }
   }
 
-  function handleRecommendationClick(habit) {
+  function handleRecommendationClick(habit: Recommendation) {
     setTitle(habit.titulo);
     setDescription(habit.descripcion);
     setClassHabit(habit.clase_pred_habit.toString());
