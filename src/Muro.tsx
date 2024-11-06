@@ -1,26 +1,41 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styles from "./components/Muro.module.css";
 import PostButton from "./components/PostButton";
 import man_avatar_2 from "./components/img/avatars/man_avatar_2.png";
 
+interface Post {
+  id_publicacion: number;
+  user: {
+    username: string;
+    avatar?: {
+      avatar: string;
+    } | null;
+  };
+  cont_media?: string | null;
+  cont_text?: string | null;
+  likesCount: number;
+  hasLiked: boolean;
+}
+
 const Muro = () => {
-  const [posts, setPosts] = useState([]);
-  const userId = localStorage.getItem("user_id");
+  const [posts, setPosts] = useState<Post[]>([]);
+  const userIdString = localStorage.getItem("user_id");
+  if (!userIdString) {
+    console.error("User ID is null or undefined");
+    return <div>Error: Usuario no autenticado</div>;
+  }
+  const userId = parseInt(userIdString, 10);
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
-    if (userId) {
-      fetch(`${API_BASE_URL}/api/posts/friends/${userId}`)
-        .then((response) => response.json())
-        .then((data) => setPosts(data))
-        .catch((error) => console.error("Failed to fetch posts:", error));
-    } else {
-      console.error("User ID is null or undefined");
-    }
+    fetch(`${API_BASE_URL}/api/posts/friends/${userId}`)
+      .then((response) => response.json())
+      .then((data: Post[]) => setPosts(data))
+      .catch((error) => console.error("Failed to fetch posts:", error));
   }, [userId]);
 
   // Funcion likes
-  const handleLike = async (postId, hasLiked) => {
+  const handleLike = async (postId: number, hasLiked: boolean) => {
     try {
       const url = hasLiked
         ? `${API_BASE_URL}/api/likes/unlike`
@@ -32,7 +47,7 @@ const Muro = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userId: parseInt(userId, 10),
+          userId,
           postId,
         }),
       });
@@ -77,7 +92,7 @@ const Muro = () => {
                   <div className={styles.postAuthor}>
                     <img
                       src={
-                        post.user.avatar && post.user.avatar.avatar
+                        post.user.avatar?.avatar
                           ? `${API_BASE_URL}/${post.user.avatar.avatar}`
                           : man_avatar_2
                       }
