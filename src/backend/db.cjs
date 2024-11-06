@@ -2,7 +2,7 @@
 const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize(
-  "leveluprailway",
+  "mysqlrailway",
   "root",
   "cpcSBYpOGxOSUvmVzboADQjjVqTYFrWw",
   {
