@@ -51,10 +51,13 @@ app.use("/api/friends", friendRoutes); // Rutas de amistad
 app.use("/api/tournaments", tournamentRoutes); // Torneos
 app.use("/api/notifications", notificationRoutes); //Notificaciones
 app.use("/api/likes", likeRoutes); //Likes
+app.get("/", (req, res) => {
+  res.send("¡La aplicación está funcionando correctamente!");
+});
 
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
 
