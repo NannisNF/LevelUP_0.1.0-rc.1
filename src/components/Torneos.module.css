@@ -60,7 +60,8 @@
   color: #fff;
   font-family: "Cinzel", serif;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
+}
 
 .tournlogo {
   height: 200px;
@@ -134,7 +135,7 @@
   font-family: "Cinzel", serif;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   width: 400px;
-  margin: 0 auto; 
+  margin: 0 auto;
 }
 
 .participantsList {
