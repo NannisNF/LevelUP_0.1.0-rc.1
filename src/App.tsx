@@ -61,7 +61,7 @@ function AppContent() {
       {isInicio && (
         <footer>
           <section>
-            <a href="/Inicio">Ir al comienzo</a>
+            <a href="/">Ir al comienzo</a>
             <br />
             <a href="mailto:alannis.perez7472@alumnos.udg.mx">
               alannis.perez7472@alumnos.udg.mx
