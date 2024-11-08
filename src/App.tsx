@@ -24,7 +24,7 @@ import styles from "./components/App.module.css";
 
 function AppContent() {
   const location = useLocation();
-  const isInicio = location.pathname === "/Inicio";
+  const isInicio = location.pathname === "/" || location.pathname === "/Inicio";
 
   return (
     <div className="App">
@@ -38,6 +38,7 @@ function AppContent() {
       >
         <div className={styles.centeredContainer}>
           <Routes>
+            <Route path="/" element={<Inicio />} />
             <Route path="/Inicio" element={<Inicio />} />
             <Route path="/muro" element={<Muro />} />
             <Route path="/perfil" element={<Perfil />} />
