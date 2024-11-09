@@ -3,15 +3,12 @@ require("dotenv").config(); //para url de archivo env
 const cron = require("node-cron");
 const Habitos = require("./models/Habitos.cjs");
 const Usuarios = require("./models/Usuarios.cjs");
-const Tournament = require("./models/Tournament.cjs");
+
 const { Op } = require("sequelize"); // Para operadores de consulta
 const express = require("express");
 const Publicacion = require("./models/Publicacion.cjs");
 const cors = require("cors");
 const notificationController = require("./controllers/notificationController.cjs");
-const friendController = require("./controllers/friendController.cjs");
-
-const nivelUtils = require("./nivelUtils.cjs");
 
 const registerRoutes = require("./routes/register.cjs");
 const loginRoutes = require("./routes/login.cjs");
