@@ -4,10 +4,10 @@ const { Sequelize } = require("sequelize");
 const sequelize = new Sequelize(
   "railway",
   "root",
-  "cpcSBYpOGxOSUvmVzboADQjjVqTYFrWw",
+  "dTlOIKmwzyFTvuYCnutyMaEyfIThkjMy",
   {
-    host: "junction.proxy.rlwy.net",
-    port: 56567,
+    host: "autorack.proxy.rlwy.net",
+    port: 27588,
     dialect: "mysql",
   }
 );
