@@ -48,7 +48,7 @@ app.use("/api/friends", friendRoutes); // Rutas de amistad
 app.use("/api/tournaments", tournamentRoutes); // Torneos
 app.use("/api/notifications", notificationRoutes); //Notificaciones
 app.use("/api/likes", likeRoutes); //Likes
-app.get("/", (req, res) => {
+app.get("/", (res) => {
   res.send("¡La aplicación está funcionando correctamente!");
 });
 
