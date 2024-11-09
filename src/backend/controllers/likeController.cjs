@@ -1,12 +1,6 @@
 // controllers/likeController.cjs
 const Sequelize = require("sequelize");
-const {
-  Publicacion,
-  Usuarios,
-  Avatares,
-  Likes,
-  Amistad,
-} = require("../models/index.cjs");
+const { Publicacion, Likes, Amistad } = require("../models/index.cjs");
 const { Op } = Sequelize;
 
 // Dar Like a una Publicación

@@ -1,14 +1,12 @@
 //userController.cjs
 const Usuarios = require("../models/Usuarios.cjs");
 const Avatares = require("../models/Avatares.cjs");
-const Nivel = require("../models/Nivel.cjs");
+
 const bcrypt = require("bcrypt");
 const {
   calcularNivelUsuario,
   calcularPorcentajeProgreso,
 } = require("../nivelUtils.cjs");
-
-const { Op } = require("sequelize");
 
 exports.getUserDetails = async (req, res) => {
   try {

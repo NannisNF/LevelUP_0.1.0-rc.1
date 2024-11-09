@@ -1,5 +1,5 @@
 //Clase.cjs
-const { Sequelize, Model, DataTypes } = require("sequelize");
+const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../db.cjs");
 
 class Clase extends Model {}

@@ -1,5 +1,5 @@
 //Usuarios.cjs
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
 const sequelize = require("../db.cjs");
 const Avatares = require("./Avatares.cjs");
 const Nivel = require("./Nivel.cjs");

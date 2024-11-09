@@ -1,8 +1,6 @@
 // models/Publicacion.cjs
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../db.cjs");
-const Likes = require("./Likes.cjs");
-const Usuarios = require("./Usuarios.cjs");
 
 class Publicacion extends Model {}
 
