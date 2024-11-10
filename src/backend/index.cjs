@@ -37,6 +37,11 @@ app.use(
 app.use(express.json()); // Solicitudes JSON
 app.use(express.static("public")); // Archivos estáticos desde la carpeta public
 
+app.use((req, res, next) => {
+  console.log(`Solicitud entrante: ${req.method} ${req.url}`);
+  next();
+});
+
 // Rutas
 app.use("/api/register", registerRoutes); // Rutas de registro
 app.use("/api/login", loginRoutes); // Rutas de login
@@ -48,8 +53,15 @@ app.use("/api/friends", friendRoutes); // Rutas de amistad
 app.use("/api/tournaments", tournamentRoutes); // Torneos
 app.use("/api/notifications", notificationRoutes); //Notificaciones
 app.use("/api/likes", likeRoutes); //Likes
-app.get("/", (res) => {
+
+app.get("/", (req, res) => {
   res.send("¡La aplicación está funcionando correctamente!");
+});
+
+// Middleware de manejo de errores
+app.use((err, req, res, next) => {
+  console.error("Error no capturado:", err);
+  res.status(500).send("Error interno del servidor");
 });
 
 // Iniciar el servidor
