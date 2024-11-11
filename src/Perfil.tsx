@@ -47,6 +47,11 @@ const Perfil = () => {
       .catch((error) => console.error("Failed to fetch user details:", error));
   }, [userId]);
 
+  //URL imagenes post
+  function isAbsoluteURL(url: string): boolean {
+    return /^https?:\/\//i.test(url);
+  }
+
   // Likes
   const handleLike = async (postId: number, hasLiked: boolean) => {
     try {
@@ -141,7 +146,11 @@ const Perfil = () => {
                 >
                   {post.cont_media && (
                     <img
-                      src={`${API_BASE_URL}/${post.cont_media}`}
+                      src={
+                        isAbsoluteURL(post.cont_media)
+                          ? post.cont_media
+                          : `${API_BASE_URL}/${post.cont_media}`
+                      }
                       alt="Post"
                       className={styles.postImage}
                     />

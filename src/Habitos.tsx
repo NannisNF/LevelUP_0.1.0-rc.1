@@ -127,6 +127,9 @@ function Habitos() {
       console.error("Error saving new habit:", error);
     }
   };
+  function isAbsoluteURL(url: string): boolean {
+    return /^https?:\/\//i.test(url);
+  }
 
   function HabitDetail() {
     if (!selectedHabit) return null;
@@ -272,7 +275,9 @@ function Habitos() {
                         className={styles.classUser}
                         src={
                           habit.image
-                            ? `${API_BASE_URL}/${habit.image}`
+                            ? isAbsoluteURL(habit.image)
+                              ? habit.image
+                              : `${API_BASE_URL}/${habit.image}`
                             : "/img/classes/sabio.jpg"
                         }
                         alt={habit.titulo || "No Title"}
