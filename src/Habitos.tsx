@@ -155,8 +155,10 @@ function Habitos() {
           className={styles.classUser}
           src={
             selectedHabit.image
-              ? `${API_BASE_URL}/${selectedHabit.image}`
-              : "/img/classes/default.jpg"
+              ? isAbsoluteURL(selectedHabit.image)
+                ? selectedHabit.image
+                : `${API_BASE_URL}/${selectedHabit.image}`
+              : "/img/classes/sabio.jpg"
           }
           alt={selectedHabit.titulo}
         />

@@ -28,6 +28,7 @@ const PerfilExternal = () => {
   const [friendshipStatus, setFriendshipStatus] = useState("none");
   const [isReceiver, setIsReceiver] = useState(false);
   const myIdString = localStorage.getItem("user_id");
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   if (!myIdString) {
     console.error("User ID is null");
     return <div>Error: Usuario no autenticado</div>;
@@ -86,7 +87,10 @@ const PerfilExternal = () => {
       fetchData();
     }
   }, [userId, myId]);
-
+  //URL imagenes post
+  function isAbsoluteURL(url: string): boolean {
+    return /^https?:\/\//i.test(url);
+  }
   const handleLike = async (postId: number, hasLiked: boolean) => {
     try {
       const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -242,7 +246,11 @@ const PerfilExternal = () => {
                 >
                   {post.cont_media && (
                     <img
-                      src={post.cont_media}
+                      src={
+                        isAbsoluteURL(post.cont_media)
+                          ? post.cont_media
+                          : `${API_BASE_URL}/${post.cont_media}`
+                      }
                       alt="Post"
                       className={styles.postImage}
                     />
