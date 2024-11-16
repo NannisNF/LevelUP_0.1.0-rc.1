@@ -150,13 +150,13 @@ const PerfilExternal = () => {
       };
 
       if (action === "add") {
-        url = `${API_BASE_URL}/api/friends/sendRequest`;
+        url = `${API_BASE_URL}/api/friends/add`;
       } else if (action === "accept") {
-        url = `${API_BASE_URL}/api/friends/acceptRequest`;
+        url = `${API_BASE_URL}/api/friends/accept`;
       } else if (action === "reject") {
-        url = `${API_BASE_URL}/api/friends/rejectRequest`;
+        url = `${API_BASE_URL}/api/friends/reject`;
       } else if (action === "remove") {
-        url = `${API_BASE_URL}/api/friends/removeFriend`;
+        url = `${API_BASE_URL}/api/friends/delete`;
       }
 
       const response = await fetch(url, {
