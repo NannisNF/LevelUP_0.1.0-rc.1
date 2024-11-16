@@ -5,9 +5,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
   background-size: cover;
   background-position: center;
+  margin-top: 220px;
+  height: 162vh;
+  width: 225vh;
   color: #fff;
 }
 
