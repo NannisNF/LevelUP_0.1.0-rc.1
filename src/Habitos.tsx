@@ -11,9 +11,12 @@ interface Habit {
   inicio_habit: string;
   fin_habit: string;
   status_habito: string;
-  image?: string;
   xp_habito: number;
   clase_habit: number;
+  clase: {
+    nameclase: string;
+    claseurl: string;
+  };
 }
 
 interface Recommendation {
@@ -154,14 +157,15 @@ function Habitos() {
         <img
           className={styles.classUser}
           src={
-            selectedHabit.image
-              ? isAbsoluteURL(selectedHabit.image)
-                ? selectedHabit.image
-                : `${API_BASE_URL}/${selectedHabit.image}`
+            selectedHabit.clase && selectedHabit.clase.claseurl
+              ? isAbsoluteURL(selectedHabit.clase.claseurl)
+                ? selectedHabit.clase.claseurl
+                : `${API_BASE_URL}/${selectedHabit.clase.claseurl}`
               : "/img/classes/sabio.jpg"
           }
-          alt={selectedHabit.titulo}
+          alt={selectedHabit.titulo || "No Title"}
         />
+
         <p>{selectedHabit.descripcion}</p>
         <div style={{ width: 100, height: 100, margin: "auto" }}>
           {isCompleted ? (
@@ -276,14 +280,15 @@ function Habitos() {
                       <img
                         className={styles.classUser}
                         src={
-                          habit.image
-                            ? isAbsoluteURL(habit.image)
-                              ? habit.image
-                              : `${API_BASE_URL}/${habit.image}`
+                          habit.clase && habit.clase.claseurl
+                            ? isAbsoluteURL(habit.clase.claseurl)
+                              ? habit.clase.claseurl
+                              : `${API_BASE_URL}/${habit.clase.claseurl}`
                             : "/img/classes/sabio.jpg"
                         }
                         alt={habit.titulo || "No Title"}
                       />
+
                       <h2>{habit.titulo || "No Title"}</h2>
                       <p>Puntos de XP: {habit.xp_habito || 0}</p>
                     </article>
