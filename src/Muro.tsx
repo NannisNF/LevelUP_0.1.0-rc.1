@@ -33,10 +33,6 @@ const Muro = () => {
       .then((data: Post[]) => setPosts(data))
       .catch((error) => console.error("Failed to fetch posts:", error));
   }, [userId]);
-  //URL imagenes post
-  function isAbsoluteURL(url: string): boolean {
-    return /^https?:\/\//i.test(url);
-  }
 
   // Funcion likes
   const handleLike = async (postId: number, hasLiked: boolean) => {
