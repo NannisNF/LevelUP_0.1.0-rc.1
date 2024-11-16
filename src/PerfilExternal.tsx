@@ -144,19 +144,26 @@ const PerfilExternal = () => {
 
       let url = "";
       let method = "POST";
-      let body = {
-        id_user1: myId,
-        id_user2: parseInt(userId, 10),
-      };
+      let body = {};
 
       if (action === "add") {
         url = `${API_BASE_URL}/api/friends/add`;
-      } else if (action === "accept") {
-        url = `${API_BASE_URL}/api/friends/accept`;
-      } else if (action === "reject") {
-        url = `${API_BASE_URL}/api/friends/reject`;
+        body = {
+          id_user1: myId, // Tu ID (solicitante)
+          id_user2: parseInt(userId, 10), // ID del otro usuario (receptor)
+        };
+      } else if (action === "accept" || action === "reject") {
+        url = `${API_BASE_URL}/api/friends/${action}`;
+        body = {
+          id_user1: parseInt(userId, 10), // ID del solicitante original
+          id_user2: myId, // Tu ID (receptor que acepta/rechaza)
+        };
       } else if (action === "remove") {
         url = `${API_BASE_URL}/api/friends/delete`;
+        body = {
+          userId: myId,
+          friendId: parseInt(userId, 10),
+        };
       }
 
       const response = await fetch(url, {
