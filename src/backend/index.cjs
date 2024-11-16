@@ -3,7 +3,7 @@ require("dotenv").config(); //para url de archivo env
 const cron = require("node-cron");
 const Habitos = require("./models/Habitos.cjs");
 const Usuarios = require("./models/Usuarios.cjs");
-
+const path = require("path");
 const { Op } = require("sequelize"); // Para operadores de consulta
 const express = require("express");
 const Publicacion = require("./models/Publicacion.cjs");
@@ -53,7 +53,7 @@ app.use("/api/friends", friendRoutes); // Rutas de amistad
 app.use("/api/tournaments", tournamentRoutes); // Torneos
 app.use("/api/notifications", notificationRoutes); //Notificaciones
 app.use("/api/likes", likeRoutes); //Likes
-
+app.use("/uploads", express.static(path.join(__dirname, "uploads"))); //POsts
 app.get("/", (req, res) => {
   res.send("¡La aplicación está funcionando correctamente!");
 });

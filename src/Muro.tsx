@@ -109,15 +109,12 @@ const Muro = () => {
                   </div>
                   {post.cont_media && (
                     <img
-                      src={
-                        isAbsoluteURL(post.cont_media)
-                          ? post.cont_media
-                          : `${API_BASE_URL}/${post.cont_media}`
-                      }
+                      src={`${API_BASE_URL}${post.cont_media}`}
                       alt="Post"
                       className={styles.postImage}
                     />
                   )}
+
                   <div className={styles.postDetails}>
                     <div className={styles.postContent}>
                       <p>{post.cont_text}</p>

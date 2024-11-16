@@ -27,9 +27,12 @@ const upload = multer({ storage: storage });
 // Crear una nueva publicación
 const createPost = async (req, res) => {
   const { uid_post, post_hid, cont_text } = req.body;
-  const cont_media = req.file
-    ? `${req.protocol}://${req.headers.host}/uploads/${req.file.filename}`
-    : null;
+  let cont_media = null;
+  if (req.file) {
+    // Almacena solo la ruta relativa
+    cont_media = `/uploads/${req.file.filename}`;
+  }
+  // Guarda la publicación con cont_media como ruta relativa
 
   try {
     // Obtener la fecha actual sin tiempo
