@@ -160,7 +160,7 @@ function Habitos() {
             selectedHabit.clase && selectedHabit.clase.claseurl
               ? isAbsoluteURL(selectedHabit.clase.claseurl)
                 ? selectedHabit.clase.claseurl
-                : `${API_BASE_URL}/${selectedHabit.clase.claseurl}`
+                : `/img/classes/${selectedHabit.clase.claseurl}`
               : "/img/classes/sabio.jpg"
           }
           alt={selectedHabit.titulo || "No Title"}
@@ -283,7 +283,7 @@ function Habitos() {
                           habit.clase && habit.clase.claseurl
                             ? isAbsoluteURL(habit.clase.claseurl)
                               ? habit.clase.claseurl
-                              : `${API_BASE_URL}/${habit.clase.claseurl}`
+                              : `/img/classes/${API_BASE_URL}/${habit.clase.claseurl}`
                             : "/img/classes/sabio.jpg"
                         }
                         alt={habit.titulo || "No Title"}
