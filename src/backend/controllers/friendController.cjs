@@ -45,8 +45,8 @@ const acceptFriendRequest = async (req, res) => {
   try {
     const friendship = await Amistad.findOne({
       where: {
-        id_user1,
-        id_user2,
+        id_user1: id_user1, // ID del solicitante
+        id_user2: id_user2, // Tu ID (receptor)
         friend_status: "pending",
       },
     });
@@ -72,8 +72,8 @@ const rejectFriendRequest = async (req, res) => {
   try {
     const friendship = await Amistad.findOne({
       where: {
-        id_user1,
-        id_user2,
+        id_user1: id_user1, // ID del solicitante
+        id_user2: id_user2, // Tu ID (receptor)
         friend_status: "pending",
       },
     });
