@@ -145,8 +145,8 @@ const PerfilExternal = () => {
       let url = "";
       let method = "POST";
       let body = {
-        senderId: myId,
-        receiverId: parseInt(userId, 10),
+        id_user1: myId,
+        id_user2: parseInt(userId, 10),
       };
 
       if (action === "add") {

@@ -31,9 +31,9 @@ const sendFriendRequest = async (req, res) => {
       id_user2,
       friend_status: "pending",
     });
-    res.status(201).send(newFriendship);
+    return res.status(201).json({ message: "Solicitud enviada exitosamente" });
   } catch (error) {
-    res.status(500).send({
+    return res.status(500).json({
       message: "Error al enviar la solicitud de amistad",
       error: error.message,
     });
