@@ -283,7 +283,7 @@ function Habitos() {
                           habit.clase && habit.clase.claseurl
                             ? isAbsoluteURL(habit.clase.claseurl)
                               ? habit.clase.claseurl
-                              : `/img/classes/${API_BASE_URL}/${habit.clase.claseurl}`
+                              : `/img/classes/${habit.clase.claseurl}`
                             : "/img/classes/sabio.jpg"
                         }
                         alt={habit.titulo || "No Title"}

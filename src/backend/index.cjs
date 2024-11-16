@@ -214,4 +214,14 @@ cron.schedule("0 0 * * *", async () => {
   }
 });
 
+// Tarea para finalizar torneos
+cron.schedule("0 0 * * *", async () => {
+  console.log("Ejecutando verificación diaria de torneos para finalizar");
+  try {
+    await tournamentController.endTournaments();
+  } catch (error) {
+    console.error("Error al ejecutar endTournaments:", error);
+  }
+});
+
 module.exports = app;
