@@ -1,5 +1,5 @@
 /* finHabit.module.css */
-
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap");
 .finHabit {
   display: flex;
   flex-direction: column;
@@ -21,6 +21,7 @@
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
+  font-family: "Cinzel", serif;
 }
 
 .espadasIcon {
@@ -35,4 +36,5 @@
   text-align: center;
   max-width: 600px;
   margin-bottom: 20px;
+  font-family: "Cinzel", serif;
 }

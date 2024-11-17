@@ -337,8 +337,8 @@ function Torneos() {
                         <p>{participant.username}</p>
                         <p>
                           {participant.status === "accepted"
-                            ? "Aceptado"
-                            : "Pendiente"}
+                            ? "  Aceptado"
+                            : "  Pendiente"}
                         </p>
                       </div>
                     ))}
