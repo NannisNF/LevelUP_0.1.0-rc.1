@@ -71,7 +71,7 @@ app.listen(PORT, () => {
 });
 
 // Tarea para actualizar el estado de los habitos
-cron.schedule("* * * * *", async () => {
+cron.schedule("0 0 * * *", async () => {
   console.log("Ejecutando actualización diaria de hábitos");
   try {
     const today = new Date().toISOString().split("T")[0]; // Fecha actual en formato YYYY-MM-DD
@@ -215,7 +215,7 @@ cron.schedule("0 0 * * *", async () => {
 });
 
 // Tarea para finalizar torneos
-cron.schedule("0 0 * * *", async () => {
+cron.schedule("* * * * *", async () => {
   console.log("Ejecutando verificación diaria de torneos para finalizar");
   try {
     await tournamentController.endTournaments();
