@@ -214,8 +214,8 @@ cron.schedule("0 0 * * *", async () => {
   }
 });
 
-// Tarea para finalizar torneos
-cron.schedule("* * * * *", async () => {
+// Tarea para finalizar torneos "0 0 * * *"  - Por la noche, */5 * * * *, cada 5 minutos, "* * * * *" - cada minuto
+cron.schedule("*/5 * * * *", async () => {
   console.log("Ejecutando verificación diaria de torneos para finalizar");
   try {
     await tournamentController.endTournaments();
