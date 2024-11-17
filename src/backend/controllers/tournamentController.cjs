@@ -280,7 +280,7 @@ exports.endTournaments = async () => {
   }
 };
 
-// Obtener el torneo activo del usuario
+// Obtener el torneo relacionado con el usuario
 exports.getActiveTournament = async (req, res) => {
   const { userId } = req.params;
 
@@ -288,14 +288,16 @@ exports.getActiveTournament = async (req, res) => {
     const participant = await TournamentParticipant.findOne({
       where: {
         user_id: userId,
-        status: "accepted",
+        status: {
+          [Op.in]: ["pending", "accepted"],
+        },
       },
       include: [
         {
           model: Tournament,
           where: {
             status: {
-              [Op.in]: ["active", "pending"],
+              [Op.in]: ["pending", "active"],
             },
           },
           include: [
@@ -324,7 +326,9 @@ exports.getActiveTournament = async (req, res) => {
     const participants = await TournamentParticipant.findAll({
       where: {
         tournament_id: participant.tournament_id,
-        status: "accepted",
+        status: {
+          [Op.in]: ["pending", "accepted"],
+        },
       },
       include: [
         {
@@ -343,10 +347,12 @@ exports.getActiveTournament = async (req, res) => {
 
     res.status(200).send({
       tournament: participant.Tournament,
+      participantStatus: participant.status,
       participants: participants.map((p) => ({
         id_usuario: p.Usuario.id_usuario,
         username: p.Usuario.username,
         avatar: p.Usuario.avatar ? p.Usuario.avatar.avatar : null,
+        status: p.status, // Agregamos el status del participante
       })),
     });
   } catch (error) {

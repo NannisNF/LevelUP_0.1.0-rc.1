@@ -16,6 +16,7 @@ interface Participant {
   id_usuario: number;
   username: string;
   avatar: string | null;
+  status: string; // Agregamos el status del participante
 }
 
 function Torneos() {
@@ -37,6 +38,47 @@ function Torneos() {
     return <div>Error: Usuario no autenticado</div>;
   }
 
+  const fetchActiveTournament = async () => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/api/tournaments/active/${userId}`
+      );
+      setActiveTournament(response.data.tournament);
+      setParticipants(response.data.participants);
+
+      // Ajustar la vista según el estado del torneo y del participante
+      const tournamentStatus = response.data.tournament.status;
+      const participantStatus = response.data.participantStatus;
+
+      if (participantStatus === "pending") {
+        // El usuario tiene una invitación pendiente
+        setView("invitationPending");
+      } else if (participantStatus === "accepted") {
+        if (tournamentStatus === "pending") {
+          // El usuario ya aceptó, pero el torneo aún está pendiente
+          setView("waiting");
+        } else if (tournamentStatus === "active") {
+          // El torneo está activo
+          setView("participants");
+        }
+      }
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        setView("initial");
+        console.error(
+          "No tienes torneos activos o pendientes:",
+          error.response?.data?.message
+        );
+      } else {
+        console.error("Error desconocido:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchActiveTournament();
+  }, [userId]);
+
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       if (search.trim()) {
@@ -48,37 +90,6 @@ function Torneos() {
 
     return () => clearTimeout(delayDebounce);
   }, [search]);
-
-  useEffect(() => {
-    const fetchActiveTournament = async () => {
-      try {
-        const response = await axios.get(
-          `${API_BASE_URL}/api/tournaments/active/${userId}`
-        );
-        setActiveTournament(response.data.tournament);
-        setParticipants(response.data.participants);
-
-        // Ajustar la vista según el estado del torneo
-        if (response.data.tournament.status === "pending") {
-          setView("waiting");
-        } else if (response.data.tournament.status === "active") {
-          setView("participants");
-        }
-      } catch (error: any) {
-        if (axios.isAxiosError(error)) {
-          setView("initial");
-          console.error(
-            "No tienes torneos activos:",
-            error.response?.data?.message
-          );
-        } else {
-          console.error("Error desconocido:", error);
-        }
-      }
-    };
-
-    fetchActiveTournament();
-  }, [userId]);
 
   const fetchResults = async () => {
     try {
@@ -137,6 +148,33 @@ function Torneos() {
       console.error("Error al crear el torneo:", error);
     } finally {
       setWaitingForResponse(false); // Resetear el estado de espera
+    }
+  };
+
+  // Funciones para aceptar o rechazar la invitación
+  const handleAcceptTournament = async (tournamentId: number) => {
+    try {
+      await axios.post(`${API_BASE_URL}/api/tournaments/accept`, {
+        user_id: parseInt(userId, 10),
+        tournament_id: tournamentId,
+      });
+      // Actualizar el estado después de aceptar
+      fetchActiveTournament();
+    } catch (error) {
+      console.error("Error al aceptar la invitación al torneo:", error);
+    }
+  };
+
+  const handleRejectTournament = async (tournamentId: number) => {
+    try {
+      await axios.post(`${API_BASE_URL}/api/tournaments/reject`, {
+        user_id: parseInt(userId, 10),
+        tournament_id: tournamentId,
+      });
+      // Actualizar el estado después de rechazar
+      setView("initial");
+    } catch (error) {
+      console.error("Error al rechazar la invitación al torneo:", error);
     }
   };
 
@@ -239,6 +277,36 @@ function Torneos() {
               </article>
             )}
 
+            {view === "invitationPending" && (
+              <div>
+                <section className={styles.torneosBanner}>
+                  <h2>Torneo Semanal</h2>
+                  <img
+                    className={styles.tournlogo}
+                    src={espadas}
+                    alt="Torneo Logo"
+                  />
+                </section>
+                <section className={styles.waitingContainer}>
+                  <h2>Tienes una invitación al torneo</h2>
+                  <button
+                    onClick={() =>
+                      handleAcceptTournament(activeTournament.id_tournament)
+                    }
+                  >
+                    Aceptar
+                  </button>
+                  <button
+                    onClick={() =>
+                      handleRejectTournament(activeTournament.id_tournament)
+                    }
+                  >
+                    Rechazar
+                  </button>
+                </section>
+              </div>
+            )}
+
             {view === "waiting" && (
               <div>
                 <section className={styles.torneosBanner}>
@@ -250,7 +318,31 @@ function Torneos() {
                   />
                 </section>
                 <section className={styles.waitingContainer}>
-                  <h2>Esperando respuesta...</h2>
+                  <h2>Esperando respuesta de los participantes...</h2>
+                  <div className={styles.participantsList}>
+                    {participants.map((participant) => (
+                      <div
+                        key={participant.id_usuario}
+                        className={styles.participante}
+                      >
+                        <img
+                          src={
+                            participant.avatar
+                              ? `${API_BASE_URL}/${participant.avatar}`
+                              : man_avatar_2
+                          }
+                          alt={`${participant.username} Avatar`}
+                          className={styles.avatar}
+                        />
+                        <p>{participant.username}</p>
+                        <p>
+                          {participant.status === "accepted"
+                            ? "Aceptado"
+                            : "Pendiente"}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </section>
               </div>
             )}
