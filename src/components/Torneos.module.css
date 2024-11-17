@@ -206,3 +206,14 @@
 .searchResultItem img {
   margin-right: 10px;
 }
+
+.waitingContainer {
+  background-color: #0d0b19;
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+  font-family: "Cinzel", serif;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  width: 400px;
+  margin: 0 auto;
+}
