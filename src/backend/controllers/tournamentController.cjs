@@ -202,34 +202,63 @@ exports.endTournaments = async () => {
       });
 
       const totalPool = participants.reduce((sum, p) => sum + p.bet_amount, 0);
+
+      // Obtener el máximo de XP acumulado
       const maxXp = Math.max(...participants.map((p) => p.xp_accumulated));
+
+      // Identificar a los ganadores
       const winners = participants.filter((p) => p.xp_accumulated === maxXp);
 
+      // Calcular las ganancias por ganador
       const winningsPerWinner = Math.floor(totalPool / winners.length);
+
+      // Verificar si todos los participantes empataron
+      const isTie = winners.length === participants.length;
 
       for (const participant of participants) {
         let result;
-        if (winners.some((winner) => winner.user_id === participant.user_id)) {
+        let message;
+
+        if (isTie) {
+          // Todos empataron
+          result = "draw";
+          message = `El torneo #${tournament.id_tournament} ha finalizado en empate.`;
+
+          // Devolver la apuesta original a cada participante
+          participant.Usuario.xp_total += participant.bet_amount;
+          await participant.Usuario.save();
+
+          // No se otorgan premios adicionales en caso de empate total
+        } else if (
+          winners.some((winner) => winner.user_id === participant.user_id)
+        ) {
+          // El participante es uno de los ganadores
           result = "win";
+          message = `¡Felicidades! Ganaste el torneo #${tournament.id_tournament}.`;
+
+          // Otorgar las ganancias al ganador
           participant.Usuario.xp_total += winningsPerWinner;
           await participant.Usuario.save();
 
           // Verificar si el usuario subió de nivel
           await checkForLevelUp(participant.Usuario);
         } else {
+          // El participante perdió
           result = "lose";
+          message = `El torneo #${tournament.id_tournament} ha finalizado. Has perdido.`;
+          // No se realiza ninguna acción adicional
         }
 
+        // Enviar notificación al participante
         await notificationController.createNotification(
           participant.user_id,
           "tournament_result",
-          `El torneo #${tournament.id_tournament} ha finalizado. Tú ${
-            result === "win" ? "ganaste" : "perdiste"
-          }.`,
+          message,
           { tournamentId: tournament.id_tournament, result }
         );
       }
 
+      // Actualizar el estado del torneo a "completed"
       tournament.status = "completed";
       await tournament.save();
       console.log(`Torneo ${tournament.id_tournament} finalizado.`);
