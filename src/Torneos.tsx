@@ -7,7 +7,9 @@ import man_avatar_2 from "./components/img/avatars/man_avatar_2.png";
 interface User {
   id_usuario: number;
   username: string | null;
-  avatar: string | null;
+  avatar: {
+    avatar: string;
+  } | null;
 }
 
 function Torneos() {
@@ -113,8 +115,9 @@ function Torneos() {
       const creator = {
         id_usuario: parseInt(userId, 10),
         username: userUsername,
-        avatar: userAvatar,
+        avatar: userAvatar ? { avatar: userAvatar } : null,
       };
+
       setSelectedParticipants([creator, ...selectedParticipants]);
 
       setView("waiting"); // Cambiar vista a esperando respuesta
@@ -167,8 +170,15 @@ function Torneos() {
                         className={styles.searchResultItem}
                       >
                         <img
-                          src={user.avatar || man_avatar_2}
-                          alt={`${user.username} Avatar`}
+                          src={
+                            user.avatar
+                              ? `${API_BASE_URL}/${user.avatar.avatar}`
+                              : man_avatar_2
+                          }
+                          alt="Avatar"
+                          width="30"
+                          height="30"
+                          className="rounded-circle me-2"
                         />
                         {user.username}
                       </li>
@@ -183,7 +193,11 @@ function Torneos() {
                       className={styles.participantItem}
                     >
                       <img
-                        src={user.avatar || man_avatar_2}
+                        src={
+                          user.avatar?.avatar
+                            ? `${API_BASE_URL}/${user.avatar.avatar}`
+                            : man_avatar_2
+                        }
                         alt="Avatar"
                         width="30"
                         height="30"
@@ -248,7 +262,11 @@ function Torneos() {
                         className={styles.participante}
                       >
                         <img
-                          src={participant.avatar || man_avatar_2}
+                          src={
+                            participant.avatar?.avatar
+                              ? `${API_BASE_URL}/${participant.avatar.avatar}`
+                              : man_avatar_2
+                          }
                           alt={`${participant.username} Avatar`}
                           className={styles.avatar}
                         />

@@ -218,7 +218,9 @@ exports.endTournaments = async () => {
       for (const participant of participants) {
         let result;
         let message;
-
+        console.log(
+          `Procesando participante ID: ${participant.user_id}, XP acumulado: ${participant.xp_accumulated}`
+        );
         if (isTie) {
           // Todos empataron
           result = "draw";
@@ -230,11 +232,14 @@ exports.endTournaments = async () => {
 
           // No se otorgan premios adicionales en caso de empate total
         } else if (
-          winners.some((winner) => winner.user_id === participant.user_id)
+          winners.some(
+            (winner) => Number(winner.user_id) === Number(participant.user_id)
+          )
         ) {
           // El participante es uno de los ganadores
           result = "win";
           message = `¡Felicidades! Ganaste el torneo #${tournament.id_tournament}.`;
+          console.log(`Participante ${participant.user_id} ha ganado.`);
 
           // Otorgar las ganancias al ganador
           participant.Usuario.xp_total += winningsPerWinner;
@@ -246,6 +251,7 @@ exports.endTournaments = async () => {
           // El participante perdió
           result = "lose";
           message = `El torneo #${tournament.id_tournament} ha finalizado. Has perdido.`;
+          console.log(`Participante ${participant.user_id} ha perdido.`);
           // No se realiza ninguna acción adicional
         }
 

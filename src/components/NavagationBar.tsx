@@ -167,6 +167,7 @@ function NavagationBar() {
                   : notif.data,
             })
           );
+          console.log("Notificaciones recibidas:", parsedNotifications);
           setNotifications(parsedNotifications);
         }
       } catch (error) {
@@ -184,7 +185,7 @@ function NavagationBar() {
         navigate("/Ganar");
       } else if (data.result === "lose") {
         navigate("/Perder");
-      } else if (data.result === "tie") {
+      } else if (data.result === "draw") {
         navigate("/Empatar");
       }
     } else if (type === "habit_completed") {
