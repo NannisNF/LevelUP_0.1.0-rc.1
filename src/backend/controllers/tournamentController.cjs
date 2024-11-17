@@ -177,6 +177,7 @@ exports.updateTournamentXp = async (user_id, xp_gained) => {
     });
 
     for (const participant of activeParticipants) {
+      participant.xp_accumulated = Number(participant.xp_accumulated) || 0;
       participant.xp_accumulated += xp_gained;
       await participant.save();
     }
@@ -204,10 +205,15 @@ exports.endTournaments = async () => {
       const totalPool = participants.reduce((sum, p) => sum + p.bet_amount, 0);
 
       // Obtener el máximo de XP acumulado
-      const maxXp = Math.max(...participants.map((p) => p.xp_accumulated));
+      const maxXp = Math.max(
+        ...participants.map((p) => Number(p.xp_accumulated))
+      );
+      console.log(`maxXp: ${maxXp}`);
 
       // Identificar a los ganadores
-      const winners = participants.filter((p) => p.xp_accumulated === maxXp);
+      const winners = participants.filter(
+        (p) => Number(p.xp_accumulated) === maxXp
+      );
 
       // Calcular las ganancias por ganador
       const winningsPerWinner = Math.floor(totalPool / winners.length);
@@ -288,7 +294,9 @@ exports.getActiveTournament = async (req, res) => {
         {
           model: Tournament,
           where: {
-            status: "active",
+            status: {
+              [Op.in]: ["active", "pending"],
+            },
           },
           include: [
             {

@@ -12,14 +12,20 @@ interface User {
   } | null;
 }
 
+interface Participant {
+  id_usuario: number;
+  username: string;
+  avatar: string | null;
+}
+
 function Torneos() {
   const [view, setView] = useState("initial");
   const [search, setSearch] = useState("");
   const [waitingForResponse, setWaitingForResponse] = useState(false);
   const [results, setResults] = useState<User[]>([]);
+  const [participants, setParticipants] = useState<Participant[]>([]);
   const [selectedParticipants, setSelectedParticipants] = useState<User[]>([]);
   const [activeTournament, setActiveTournament] = useState<any>(null);
-  const [participants, setParticipants] = useState<User[]>([]);
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const userId = localStorage.getItem("user_id");
@@ -51,7 +57,13 @@ function Torneos() {
         );
         setActiveTournament(response.data.tournament);
         setParticipants(response.data.participants);
-        setView("participants");
+
+        // Ajustar la vista según el estado del torneo
+        if (response.data.tournament.status === "pending") {
+          setView("waiting");
+        } else if (response.data.tournament.status === "active") {
+          setView("participants");
+        }
       } catch (error: any) {
         if (axios.isAxiosError(error)) {
           setView("initial");
@@ -263,8 +275,8 @@ function Torneos() {
                       >
                         <img
                           src={
-                            participant.avatar?.avatar
-                              ? `${API_BASE_URL}/${participant.avatar.avatar}`
+                            participant.avatar
+                              ? `${API_BASE_URL}/${participant.avatar}`
                               : man_avatar_2
                           }
                           alt={`${participant.username} Avatar`}
